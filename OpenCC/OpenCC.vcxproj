@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="OpenCC.cpp" />
+    <ClCompile Include="opencc\BinaryDict.cpp" />
+    <ClCompile Include="opencc\Config.cpp" />
+    <ClCompile Include="opencc\Conversion.cpp" />
+    <ClCompile Include="opencc\ConversionChain.cpp" />
+    <ClCompile Include="opencc\Converter.cpp" />
+    <ClCompile Include="opencc\DartsDict.cpp" />
+    <ClCompile Include="opencc\Dict.cpp" />
+    <ClCompile Include="opencc\DictEntry.cpp" />
+    <ClCompile Include="opencc\DictGroup.cpp" />
+    <ClCompile Include="opencc\Lexicon.cpp" />
+    <ClCompile Include="opencc\MarisaDict.cpp" />
+    <ClCompile Include="opencc\marisa\grimoire\io\mapper.cc" />
+    <ClCompile Include="opencc\marisa\grimoire\io\reader.cc" />
+    <ClCompile Include="opencc\marisa\grimoire\io\writer.cc" />
+    <ClCompile Include="opencc\marisa\grimoire\trie\tail.cc" />
+    <ClCompile Include="opencc\MaxMatchSegmentation.cpp" />
+    <ClCompile Include="opencc\Segmentation.cpp" />
+    <ClCompile Include="opencc\SerializedValues.cpp" />
+    <ClCompile Include="opencc\SimpleConverter.cpp" />
+    <ClCompile Include="opencc\TextDict.cpp" />
+    <ClCompile Include="opencc\UTF8Util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="opencc\BinaryDict.hpp" />
+    <ClInclude Include="opencc\Common.hpp" />
+    <ClInclude Include="opencc\Config.hpp" />
+    <ClInclude Include="opencc\Conversion.hpp" />
+    <ClInclude Include="opencc\ConversionChain.hpp" />
+    <ClInclude Include="opencc\Converter.hpp" />
+    <ClInclude Include="opencc\darts.h" />
+    <ClInclude Include="opencc\DartsDict.hpp" />
+    <ClInclude Include="opencc\Dict.hpp" />
+    <ClInclude Include="opencc\DictEntry.hpp" />
+    <ClInclude Include="opencc\DictGroup.hpp" />
+    <ClInclude Include="opencc\Exception.hpp" />
+    <ClInclude Include="opencc\Export.hpp" />
+    <ClInclude Include="opencc\Lexicon.hpp" />
+    <ClInclude Include="opencc\marisa.h" />
+    <ClInclude Include="opencc\MarisaDict.hpp" />
+    <ClInclude Include="opencc\marisa\agent.h" />
+    <ClInclude Include="opencc\marisa\base.h" />
+    <ClInclude Include="opencc\marisa\exception.h" />
+    <ClInclude Include="opencc\marisa\grimoire\algorithm.h" />
+    <ClInclude Include="opencc\marisa\grimoire\algorithm\sort.h" />
+    <ClInclude Include="opencc\marisa\grimoire\intrin.h" />
+    <ClInclude Include="opencc\marisa\grimoire\io.h" />
+    <ClInclude Include="opencc\marisa\grimoire\io\mapper.h" />
+    <ClInclude Include="opencc\marisa\grimoire\io\reader.h" />
+    <ClInclude Include="opencc\marisa\grimoire\io\writer.h" />
+    <ClInclude Include="opencc\marisa\grimoire\trie.h" />
+    <ClInclude Include="opencc\marisa\grimoire\trie\state.h" />
+    <ClInclude Include="opencc\marisa\grimoire\trie\tail.h" />
+    <ClInclude Include="opencc\marisa\grimoire\vector.h" />
+    <ClInclude Include="opencc\marisa\grimoire\vector\vector.h" />
+    <ClInclude Include="opencc\marisa\iostream.h" />
+    <ClInclude Include="opencc\marisa\key.h" />
+    <ClInclude Include="opencc\marisa\keyset.h" />
+    <ClInclude Include="opencc\marisa\query.h" />
+    <ClInclude Include="opencc\marisa\scoped-array.h" />
+    <ClInclude Include="opencc\marisa\scoped-ptr.h" />
+    <ClInclude Include="opencc\marisa\stdio.h" />
+    <ClInclude Include="opencc\marisa\trie.h" />
+    <ClInclude Include="opencc\MaxMatchSegmentation.hpp" />
+    <ClInclude Include="opencc\opencc.h" />
+    <ClInclude Include="opencc\Optional.hpp" />
+    <ClInclude Include="opencc\rapidjson\internal\stack.h" />
+    <ClInclude Include="opencc\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="opencc\rapidjson\internal\strtod.h" />
+    <ClInclude Include="opencc\rapidjson\internal\swap.h" />
+    <ClInclude Include="opencc\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="opencc\rapidjson\stream.h" />
+    <ClInclude Include="opencc\rapidjson\stringbuffer.h" />
+    <ClInclude Include="opencc\rapidjson\writer.h" />
+    <ClInclude Include="opencc\Segmentation.hpp" />
+    <ClInclude Include="opencc\Segments.hpp" />
+    <ClInclude Include="opencc\SerializableDict.hpp" />
+    <ClInclude Include="opencc\SerializedValues.hpp" />
+    <ClInclude Include="opencc\SimpleConverter.hpp" />
+    <ClInclude Include="opencc\TextDict.hpp" />
+    <ClInclude Include="opencc\UTF8Util.hpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{06c807b7-4fd4-46e9-b8a0-b3354c1a6091}</ProjectGuid>
+    <RootNamespace>OpenCC</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

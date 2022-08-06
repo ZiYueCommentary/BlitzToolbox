@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="OpenCC.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\MarisaDict.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\MaxMatchSegmentation.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\Segmentation.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\SerializedValues.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\SimpleConverter.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\TextDict.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\UTF8Util.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\marisa\grimoire\io\mapper.cc">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\marisa\grimoire\io\reader.cc">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\marisa\grimoire\io\writer.cc">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\marisa\grimoire\trie\tail.cc">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\BinaryDict.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\Config.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\Conversion.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\ConversionChain.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\Converter.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\DartsDict.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\Dict.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\DictEntry.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\DictGroup.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="opencc\Lexicon.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="opencc\Lexicon.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\MarisaDict.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\MaxMatchSegmentation.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\opencc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\Optional.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\Segmentation.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\Segments.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\SerializableDict.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\SerializedValues.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\SimpleConverter.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\TextDict.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\UTF8Util.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\agent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\base.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\exception.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\grimoire\algorithm\sort.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\grimoire\algorithm.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\grimoire\intrin.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\grimoire\io\mapper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\grimoire\io\reader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\grimoire\io\writer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\grimoire\io.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\grimoire\trie\state.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\grimoire\trie\tail.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\grimoire\trie.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\grimoire\vector\vector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\grimoire\vector.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\iostream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\key.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\keyset.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\query.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\scoped-array.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\scoped-ptr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\stdio.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\marisa\trie.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\rapidjson\internal\stack.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\rapidjson\internal\strfunc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\rapidjson\internal\strtod.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\rapidjson\internal\swap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\rapidjson\msinttypes\stdint.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\rapidjson\stream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\rapidjson\stringbuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\rapidjson\writer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\BinaryDict.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\Common.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\Config.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\Conversion.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\ConversionChain.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\Converter.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\darts.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\DartsDict.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\Dict.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\DictEntry.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\DictGroup.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\Exception.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="opencc\Export.hpp">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
