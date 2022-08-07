@@ -212,9 +212,6 @@
     <ClInclude Include="opencc\rapidjson\stringbuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="opencc\rapidjson\writer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="opencc\BinaryDict.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -254,5 +251,10 @@
     <ClInclude Include="opencc\Export.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OpenCC.decls">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

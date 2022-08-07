@@ -129,6 +129,9 @@
   <ItemGroup>
     <ClCompile Include="NetworkConnector.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="NetworkConnector.decls" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

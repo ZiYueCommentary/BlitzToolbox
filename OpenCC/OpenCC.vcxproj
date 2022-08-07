@@ -92,7 +92,6 @@
     <ClInclude Include="opencc\rapidjson\msinttypes\stdint.h" />
     <ClInclude Include="opencc\rapidjson\stream.h" />
     <ClInclude Include="opencc\rapidjson\stringbuffer.h" />
-    <ClInclude Include="opencc\rapidjson\writer.h" />
     <ClInclude Include="opencc\Segmentation.hpp" />
     <ClInclude Include="opencc\Segments.hpp" />
     <ClInclude Include="opencc\SerializableDict.hpp" />
@@ -100,6 +99,9 @@
     <ClInclude Include="opencc\SimpleConverter.hpp" />
     <ClInclude Include="opencc\TextDict.hpp" />
     <ClInclude Include="opencc\UTF8Util.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="OpenCC.decls" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -181,6 +183,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

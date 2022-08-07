@@ -20,7 +20,7 @@
 #include <list>
 #include <unordered_map>
 
-#include <rapidjson/document.h>
+#include "rapidjson/document.h"
 
 #include "Config.hpp"
 #include "ConversionChain.hpp"
