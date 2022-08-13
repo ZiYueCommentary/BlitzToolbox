@@ -21,7 +21,7 @@
 
 #pragma comment(lib, "wininet.lib")
 typedef const char* BBStr;
-using namespace std;
+using std::string;
 
 string exec(const char* cmd) {
     FILE* pipe = _popen(cmd, "r");
