@@ -90,6 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -97,6 +98,12 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir $(SolutionDir)Build\$(ProjectName)
+copy /y $(ProjectDir)$(ProjectName).decls $(SolutionDir)Build\$(ProjectName)\$(ProjectName).decls
+copy /y $(SolutionDir)$(IntDir)$(ProjectName).dll $(SolutionDir)Build\$(ProjectName)\$(ProjectName).dll
+copy /y $(SolutionDir)$(IntDir)Example.bb $(SolutionDir)Build\$(ProjectName)\Example.bb</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -130,6 +137,7 @@
     <ClCompile Include="NetworkConnector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Example.bb" />
     <None Include="NetworkConnector.decls" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

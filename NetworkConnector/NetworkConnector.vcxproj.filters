@@ -23,5 +23,8 @@
     <None Include="NetworkConnector.decls">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="Example.bb">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

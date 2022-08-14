@@ -70,6 +70,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ExtensionsToDeleteOnClean>*.lib;*.exp;$(ExtensionsToDeleteOnClean)</ExtensionsToDeleteOnClean>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -96,8 +99,15 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>mkdir $(SolutionDir)Build\$(ProjectName)
+copy /y $(ProjectDir)$(ProjectName).bb $(SolutionDir)Build\$(ProjectName)\$(ProjectName).bb
+copy /y $(ProjectDir)$(ProjectName).decls $(SolutionDir)Build\$(ProjectName)\$(ProjectName).decls
+copy /y $(SolutionDir)$(IntDir)$(ProjectName).dll $(SolutionDir)Build\$(ProjectName)\$(ProjectName).dll
+copy /y $(SolutionDir)$(IntDir)Example.bb $(SolutionDir)Build\$(ProjectName)\Example.bb</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -131,6 +141,8 @@
     <ClCompile Include="IniControler.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Example.bb" />
+    <None Include="IniControler.bb" />
     <None Include="IniControler.decls" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

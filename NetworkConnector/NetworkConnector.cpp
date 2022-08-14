@@ -2,25 +2,17 @@
 * NetworkConnector - A part of BlitzToolbox
 * Parse domain's TXT and download files.
 * 
-* DownloadFile("https://scpcbgame.com/changelog.txt", "changelog.txt")
-* Print "Download Completed!"
-* Print "DomainTXT: " + ParseDomainTXT(GetDomainTXT("version.scpcbgame.cn"), "version")
-* WaitKey
-*
-* v1.0 2022.5.2
+* v1.0 2022.8.14
 */
 
-#include <math.h>
-#include <stdlib.h>
-#include <string>
+#include "../BlitzToolbox.hpp"
 #include <Windows.h>
 #include <wininet.h>
 #include <fstream>
+#include <format>
 #pragma warning(disable : 4996)
-#define BLITZ3D(x) extern "C" __declspec(dllexport) x _stdcall
 
 #pragma comment(lib, "wininet.lib")
-typedef const char* BBStr;
 using std::string;
 
 string exec(const char* cmd) {
@@ -50,24 +42,19 @@ string clearTabLeft(string src) {
 }
 
 BLITZ3D(BBStr) ParseDomainTXT(BBStr txt, BBStr key) {
-    string s1 = txt;
-    string s2 = key;
-    string result;
+    string s1 = txt, s2 = key, result;
     int n, a;
     if ((n = s1.find(key)) != string::npos) result = s1.substr(n);
     if ((a = result.find(';')) != string::npos) result = result.substr(s2.length() + 1, a - s2.length() - 1);
-    return result.c_str();
+    return getCharPtr(result);
 }
 
 BLITZ3D(BBStr) GetDomainTXT(BBStr domain) {
-    string cmd = "nslookup -qt=TXT ";
-    cmd += domain;
-    string result = exec(cmd.c_str());
-    result = clearTabLeft(result);
+    string result = clearTabLeft(exec(std::format("nslookup -qt=TXT {0}", domain).c_str()));
     if (result[0] == '\"') result = result.substr(1);
     if (result[result.length() - 2] == '\"')result = result.substr(0, result.length() - 2);
     if (result[result.length() - 1] != ';') result += ';';
-    return result.c_str();
+    return getCharPtr(result);
 }
 
 BLITZ3D(int) DownloadFile(BBStr url, BBStr file)

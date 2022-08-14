@@ -2,23 +2,15 @@
 * IniControler - A part of BlitzToolBox
 * Write & Read ini file.
 * 
-* IniWriteString("options.ini", "foo", "bar", "wow")
-* IniWriteBuffer("options.ini")
-* Print IniGetString("options.ini", "foo", "bar")
-* WaitKey
-*
-* v1.0 2022.7.29
+* v1.0 2022.8.14
 */
 
+#include "../BlitzToolbox.hpp"
 #include <map>
 #include <fstream>
-#include <string>
 #include <windows.h>
 
-#define BLITZ3D(x) extern "C" __declspec(dllexport) x _stdcall
-
 using namespace std;
-typedef const char* BBStr;
 
 // We can't use const char* to get thing from buffer (maybe because string's pointer is different?)
 // so we must use std::string to get thing from buffer
@@ -26,13 +18,6 @@ typedef const char* BBStr;
 * Buffer for ini files.
 */
 static map<string, map<string, BBStr>> IniBuffer;
-
-BBStr getCharPtr(std::string str) {
-    char* cha = new char[str.size() + 1];
-    memcpy(cha, str.c_str(), str.size() + 1);
-    const char* p = cha;
-    return p;
-}
 
 /*
 * Write buffer for ini file.
@@ -126,10 +111,10 @@ BLITZ3D(float) IniGetFloat(BBStr path, BBStr section, BBStr key, float defaultVa
 * @return Value of key, or default value.
 */
 BLITZ3D(BBStr) IniGetBufferString(BBStr path, BBStr section, BBStr key, BBStr defaultValue) {
-    if (IniBuffer[path][section + ","s + key] != nullptr) {
+    if (IniBuffer[path][section + ","s + key] != nullptr)
         return IniBuffer[path][section + ","s + key];
-    }
-    else return defaultValue;
+    else 
+        return defaultValue;
 }
 
 BLITZ3D(int) IniGetBufferInt(BBStr path, BBStr section, BBStr key, int defaultValue) {
@@ -182,4 +167,18 @@ BLITZ3D(void) IniClearBuffer(BBStr path) {
 */
 BLITZ3D(void) IniClearAllBuffer() {
     IniBuffer.clear();
+}
+
+/* DANGER ZONE */
+
+/*
+* Set buffer's value.
+* 
+* @param path           Path of ini file.
+* @param section        Section of key.
+* @param key            Key of value.
+* @param value          Value of key.
+*/
+BLITZ3D(void) IniSetBufferValue(BBStr path, BBStr section, BBStr key, BBStr value) {
+    IniBuffer[path][section + ","s + key] = value;
 }
