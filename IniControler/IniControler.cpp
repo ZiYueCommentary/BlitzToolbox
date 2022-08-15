@@ -12,8 +12,8 @@
 
 using namespace std;
 
-// We can't use const char* to get thing from buffer (maybe because string's pointer is different?)
-// so we must use std::string to get thing from buffer
+// We can't use const char* to get things from buffer (maybe because string's pointer is different?)
+// so we must use std::string to get things from buffer
 /*
 * Buffer for ini files.
 */

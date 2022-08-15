@@ -18,97 +18,11 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="OpenCC.cpp" />
-    <ClCompile Include="opencc\BinaryDict.cpp" />
-    <ClCompile Include="opencc\Config.cpp" />
-    <ClCompile Include="opencc\Conversion.cpp" />
-    <ClCompile Include="opencc\ConversionChain.cpp" />
-    <ClCompile Include="opencc\Converter.cpp" />
-    <ClCompile Include="opencc\DartsDict.cpp" />
-    <ClCompile Include="opencc\Dict.cpp" />
-    <ClCompile Include="opencc\DictEntry.cpp" />
-    <ClCompile Include="opencc\DictGroup.cpp" />
-    <ClCompile Include="opencc\Lexicon.cpp" />
-    <ClCompile Include="opencc\MarisaDict.cpp" />
-    <ClCompile Include="opencc\marisa\grimoire\io\mapper.cc" />
-    <ClCompile Include="opencc\marisa\grimoire\io\reader.cc" />
-    <ClCompile Include="opencc\marisa\grimoire\io\writer.cc" />
-    <ClCompile Include="opencc\marisa\grimoire\trie\tail.cc" />
-    <ClCompile Include="opencc\MaxMatchSegmentation.cpp" />
-    <ClCompile Include="opencc\Segmentation.cpp" />
-    <ClCompile Include="opencc\SerializedValues.cpp" />
-    <ClCompile Include="opencc\SimpleConverter.cpp" />
-    <ClCompile Include="opencc\TextDict.cpp" />
-    <ClCompile Include="opencc\UTF8Util.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="opencc\BinaryDict.hpp" />
-    <ClInclude Include="opencc\Common.hpp" />
-    <ClInclude Include="opencc\Config.hpp" />
-    <ClInclude Include="opencc\Conversion.hpp" />
-    <ClInclude Include="opencc\ConversionChain.hpp" />
-    <ClInclude Include="opencc\Converter.hpp" />
-    <ClInclude Include="opencc\darts.h" />
-    <ClInclude Include="opencc\DartsDict.hpp" />
-    <ClInclude Include="opencc\Dict.hpp" />
-    <ClInclude Include="opencc\DictEntry.hpp" />
-    <ClInclude Include="opencc\DictGroup.hpp" />
-    <ClInclude Include="opencc\Exception.hpp" />
-    <ClInclude Include="opencc\Export.hpp" />
-    <ClInclude Include="opencc\Lexicon.hpp" />
-    <ClInclude Include="opencc\marisa.h" />
-    <ClInclude Include="opencc\MarisaDict.hpp" />
-    <ClInclude Include="opencc\marisa\agent.h" />
-    <ClInclude Include="opencc\marisa\base.h" />
-    <ClInclude Include="opencc\marisa\exception.h" />
-    <ClInclude Include="opencc\marisa\grimoire\algorithm.h" />
-    <ClInclude Include="opencc\marisa\grimoire\algorithm\sort.h" />
-    <ClInclude Include="opencc\marisa\grimoire\intrin.h" />
-    <ClInclude Include="opencc\marisa\grimoire\io.h" />
-    <ClInclude Include="opencc\marisa\grimoire\io\mapper.h" />
-    <ClInclude Include="opencc\marisa\grimoire\io\reader.h" />
-    <ClInclude Include="opencc\marisa\grimoire\io\writer.h" />
-    <ClInclude Include="opencc\marisa\grimoire\trie.h" />
-    <ClInclude Include="opencc\marisa\grimoire\trie\state.h" />
-    <ClInclude Include="opencc\marisa\grimoire\trie\tail.h" />
-    <ClInclude Include="opencc\marisa\grimoire\vector.h" />
-    <ClInclude Include="opencc\marisa\grimoire\vector\vector.h" />
-    <ClInclude Include="opencc\marisa\iostream.h" />
-    <ClInclude Include="opencc\marisa\key.h" />
-    <ClInclude Include="opencc\marisa\keyset.h" />
-    <ClInclude Include="opencc\marisa\query.h" />
-    <ClInclude Include="opencc\marisa\scoped-array.h" />
-    <ClInclude Include="opencc\marisa\scoped-ptr.h" />
-    <ClInclude Include="opencc\marisa\stdio.h" />
-    <ClInclude Include="opencc\marisa\trie.h" />
-    <ClInclude Include="opencc\MaxMatchSegmentation.hpp" />
-    <ClInclude Include="opencc\opencc.h" />
-    <ClInclude Include="opencc\Optional.hpp" />
-    <ClInclude Include="opencc\rapidjson\internal\stack.h" />
-    <ClInclude Include="opencc\rapidjson\internal\strfunc.h" />
-    <ClInclude Include="opencc\rapidjson\internal\strtod.h" />
-    <ClInclude Include="opencc\rapidjson\internal\swap.h" />
-    <ClInclude Include="opencc\rapidjson\msinttypes\stdint.h" />
-    <ClInclude Include="opencc\rapidjson\stream.h" />
-    <ClInclude Include="opencc\rapidjson\stringbuffer.h" />
-    <ClInclude Include="opencc\Segmentation.hpp" />
-    <ClInclude Include="opencc\Segments.hpp" />
-    <ClInclude Include="opencc\SerializableDict.hpp" />
-    <ClInclude Include="opencc\SerializedValues.hpp" />
-    <ClInclude Include="opencc\SimpleConverter.hpp" />
-    <ClInclude Include="opencc\TextDict.hpp" />
-    <ClInclude Include="opencc\UTF8Util.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Example.bb" />
-    <None Include="OpenCC.decls" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{06c807b7-4fd4-46e9-b8a0-b3354c1a6091}</ProjectGuid>
-    <RootNamespace>OpenCC</RootNamespace>
+    <ProjectGuid>{8295ee11-86f5-452d-880b-f5eb47005fc2}</ProjectGuid>
+    <RootNamespace>ALLBUILD</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -119,11 +33,11 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Makefile</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>false</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -132,11 +46,11 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>false</WholeProgramOptimization>
-    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -176,23 +90,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>
-      </AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>mkdir $(SolutionDir)Build\$(ProjectName)
-copy /y $(ProjectDir)$(ProjectName).decls $(SolutionDir)Build\$(ProjectName)\$(ProjectName).decls
-copy /y $(SolutionDir)$(IntDir)$(ProjectName).dll $(SolutionDir)Build\$(ProjectName)\$(ProjectName).dll
-copy /y $(SolutionDir)$(ProjectName)\Example.bb $(SolutionDir)Build\$(ProjectName)\Example.bb</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -214,8 +119,6 @@ copy /y $(SolutionDir)$(ProjectName)\Example.bb $(SolutionDir)Build\$(ProjectNam
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -224,6 +127,20 @@ copy /y $(SolutionDir)$(ProjectName)\Example.bb $(SolutionDir)Build\$(ProjectNam
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BlitzFormat\BlitzFormat.vcxproj">
+      <Project>{92d30a30-4ca2-4676-b79d-4d0544135fa3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\IniControler\IniControler.vcxproj">
+      <Project>{adc74f07-a6cc-4bdd-91b2-3a907940b040}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkConnector\NetworkConnector.vcxproj">
+      <Project>{0ea4ac02-488b-4565-b4aa-6b2f9a2507dd}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenCC\OpenCC.vcxproj">
+      <Project>{06c807b7-4fd4-46e9-b8a0-b3354c1a6091}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -1,5 +1,6 @@
 ; IniControler - A part of BlitzToolBox
 ; Write & Read ini file.
+; v1.0 2022.8.14
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
 Function IniWriteString(path$, section$, key$, value$, updateBuffer% = 1)

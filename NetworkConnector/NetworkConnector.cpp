@@ -10,7 +10,6 @@
 #include <wininet.h>
 #include <fstream>
 #include <format>
-#pragma warning(disable : 4996)
 
 #pragma comment(lib, "wininet.lib")
 using std::string;
@@ -21,8 +20,7 @@ string exec(const char* cmd) {
     char buffer[128];
     string result = "";
     while (!feof(pipe)) {
-        if (fgets(buffer, 128, pipe) != NULL)
-            result = buffer;
+        if (fgets(buffer, 128, pipe) != NULL) result = buffer;
     }
     _pclose(pipe);
     return result;

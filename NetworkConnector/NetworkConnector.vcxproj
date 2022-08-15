@@ -91,6 +91,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -102,7 +103,7 @@
       <Command>mkdir $(SolutionDir)Build\$(ProjectName)
 copy /y $(ProjectDir)$(ProjectName).decls $(SolutionDir)Build\$(ProjectName)\$(ProjectName).decls
 copy /y $(SolutionDir)$(IntDir)$(ProjectName).dll $(SolutionDir)Build\$(ProjectName)\$(ProjectName).dll
-copy /y $(SolutionDir)$(IntDir)Example.bb $(SolutionDir)Build\$(ProjectName)\Example.bb</Command>
+copy /y $(SolutionDir)$(ProjectName)\Example.bb $(SolutionDir)Build\$(ProjectName)\Example.bb</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
