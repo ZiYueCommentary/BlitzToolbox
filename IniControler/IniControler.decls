@@ -1,16 +1,16 @@
 ; IniControler - A part of BlitzToolBox
 ; Write & Read ini file.
-; v1.0 2022.8.14
+; v1.01 2022.8.18
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
 .lib "IniControler.dll"
 
-IniWriteBuffer(path$):"_IniWriteBuffer@4"
 IniClearBuffer(path$):"_IniClearBuffer@4"
 IniClearAllBuffer():"_IniClearAllBuffer@0"
 IniSetBufferValue(path$, section$, key$, value$):"_IniSetBufferValue@16"
 
 ; they have default parameters so you need include "IniControler.bb"
+IniWriteBuffer_(path$, clearPervious%):"_IniWriteBuffer@8"
 IniGetString_$(path$, section$, key$, defaultValue$, allowBuffer%):"_IniGetString@20"
 IniGetInt_%(path$, section$, key$, defaultValue%, allowBuffer%):"_IniGetInt@20"
 IniGetFloat_#(path$, section$, key$, defaultValue#, allowBuffer%):"_IniGetFloat@20"
@@ -24,6 +24,7 @@ IniWriteFloat_(path$, section$, key$, value#, updateBuffer%):"_IniWriteFloat@20"
 ; Header File :DDD
 .lib " "
 
+IniWriteBuffer(path$, clearPervious%)
 IniGetString$(path$, section$, key$, defaultValue$, allowBuffer%)
 IniGetInt%(path$, section$, key$, defaultValue%, allowBuffer%)
 IniGetFloat#(path$, section$, key$, defaultValue#, allowBuffer%)

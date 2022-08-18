@@ -9,7 +9,7 @@
 #include "sformat.h"
 
 // very simple, but very useful! :D
-// do not use SFormat or you will get C7595
+// do not use std::format or you will get C7595
 
 BLITZ3D(BBStr) Format(BBStr fmt, BBStr arg) {
 	return getCharPtr(SFormat(fmt, arg));

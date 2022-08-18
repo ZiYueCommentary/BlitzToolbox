@@ -2,7 +2,7 @@
 * IniControler - A part of BlitzToolBox
 * Write & Read ini file.
 * 
-* v1.0 2022.8.14
+* v1.01 2022.8.18
 */
 
 #include "../BlitzToolbox.hpp"
@@ -22,10 +22,11 @@ static map<string, map<string, BBStr>> IniBuffer;
 /*
 * Write buffer for ini file.
 *
-* @param path Path of ini file.
+* @param path          Path of ini file.
+* @param clearPervious Clear old content of buffer.
 */
-BLITZ3D(void) IniWriteBuffer(BBStr path) {
-    IniBuffer[path].clear();
+BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPervious) {
+    if(clearPervious) IniBuffer[path].clear();
     map<string, BBStr> buffer;
     ifstream file(path);
     if (!file.is_open()) return;
