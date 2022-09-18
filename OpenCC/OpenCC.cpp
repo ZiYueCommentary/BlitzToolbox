@@ -1,5 +1,5 @@
 /*
-* OpenCC extension - A part of BlitzToolbox
+* OpenCC - A part of BlitzToolbox
 * Conversion between Traditional and Simplified Chinese.
 * 
 * v1.0 2022.7.27
@@ -8,7 +8,6 @@
 #include "opencc/SimpleConverter.hpp"
 #include "../BlitzToolbox.hpp"
 
-#pragma comment(lib, "libmarisa.lib")
 using namespace opencc;
 
 BLITZ3D(SimpleConverter*) CreateOpenCC(BBStr configFileName) {

@@ -99,10 +99,14 @@
     <ClInclude Include="opencc\SimpleConverter.hpp" />
     <ClInclude Include="opencc\TextDict.hpp" />
     <ClInclude Include="opencc\UTF8Util.hpp" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Example.bb" />
     <None Include="OpenCC.decls" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="OpenCC.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -186,6 +190,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
+      <AdditionalDependencies>libmarisa.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>mkdir $(SolutionDir)Build\$(ProjectName)

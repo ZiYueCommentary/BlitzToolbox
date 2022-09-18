@@ -2,7 +2,7 @@
 * IniControler - A part of BlitzToolBox
 * Write & Read ini file.
 * 
-* v1.01 2022.8.18
+* v1.02 2022.8.18
 */
 
 #include "../BlitzToolbox.hpp"
@@ -17,7 +17,7 @@ using namespace std;
 /*
 * Buffer for ini files.
 */
-static map<string, map<string, BBStr>> IniBuffer;
+static map<string, map<string, map<string, BBStr>>> IniBuffer;
 
 /*
 * Write buffer for ini file.
@@ -25,9 +25,9 @@ static map<string, map<string, BBStr>> IniBuffer;
 * @param path          Path of ini file.
 * @param clearPervious Clear old content of buffer.
 */
-BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPervious) {
-    if(clearPervious) IniBuffer[path].clear();
-    map<string, BBStr> buffer;
+BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPrevious) {
+    if(clearPrevious) IniBuffer[path].clear();
+    map<string, map<string, BBStr>> buffer;
     ifstream file(path);
     if (!file.is_open()) return;
 
@@ -44,7 +44,7 @@ BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPervious) {
             if (key[key.length() - 1] == ' ') key = key.substr(0, key.length() - 1);
             string value = line.substr(line.find('=') + 1);
             if (value[0] == ' ') value = value.substr(1);
-            buffer[section + ","s + key] = getCharPtr(value);
+            buffer[section][key] = getCharPtr(value);
         }
     }
     file.close();
@@ -66,8 +66,8 @@ BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPervious) {
 */
 BLITZ3D(BBStr) IniGetString(BBStr path, BBStr section, BBStr key, BBStr defaultValue, bool allowBuffer) {
     if (allowBuffer) { 
-        if (IniBuffer[path][section + ","s + key] != nullptr) { // in java it will throw exception when get null
-            return IniBuffer[path][section + ","s + key]; // but in c++ it wont throw
+        if (IniBuffer[path][section].contains(key)) { // in java it will throw exception when get null
+            return IniBuffer[path][section][key]; // but in c++ it wont throw
         }
     }
 
@@ -101,6 +101,57 @@ BLITZ3D(float) IniGetFloat(BBStr path, BBStr section, BBStr key, float defaultVa
     return atof(IniGetString(path, section, key, to_string(defaultValue).c_str(), allowBuffer));
 }
 
+BLITZ3D(bool) IniSectionExist(BBStr path, BBStr section, bool allowBuffer) {
+    if (allowBuffer) {
+        bool contain = IniBuffer[path].contains(section);
+        if (contain) return contain;
+    }
+
+    ifstream file(path);
+    string line, section1 = "";
+    while (getline(file, line)) {
+        if (line[0] == ';') continue;
+        if (line[0] == '[' && line[line.length() - 1] == ']') {
+            section1 = string(line, 1, line.length() - 2);
+            if (section == section1) return true;
+        }
+        continue;
+    }
+    return false;
+}
+
+BLITZ3D(bool) IniBufferSectionExist(BBStr path, BBStr section) {
+    return IniBuffer[path].contains(section);
+}
+
+BLITZ3D(bool) IniKeyExist(BBStr path, BBStr section, BBStr key, bool allowBuffer) {
+    if (allowBuffer) {
+        bool contain = IniBuffer[path][section].contains(key);
+        if (contain) return contain;
+    }
+
+    ifstream file(path);
+    string line, section1 = "";
+    while (getline(file, line)) {
+        if (line[0] == ';') continue;
+        if (line[0] == '[' && line[line.length() - 1] == ']') {
+            section1 = string(line, 1, line.length() - 2);
+            continue;
+        }
+        if (line.find('=') != string::npos) {
+            if (section1 == "") continue;
+            string key1 = line.substr(0, line.find('='));
+            if (key1[key1.length() - 1] == ' ') key1 = key1.substr(0, key1.length() - 1);
+            if ((section1 == section) && (key == key1)) return true;
+        }
+    }
+    return false;
+}
+
+BLITZ3D(bool) IniBufferKeyExist(BBStr path, BBStr section, BBStr key) {
+    return IniBuffer[path][section].contains(key);
+}
+
 /*
 * Get value from buffer ONLY.
 *
@@ -112,8 +163,8 @@ BLITZ3D(float) IniGetFloat(BBStr path, BBStr section, BBStr key, float defaultVa
 * @return Value of key, or default value.
 */
 BLITZ3D(BBStr) IniGetBufferString(BBStr path, BBStr section, BBStr key, BBStr defaultValue) {
-    if (IniBuffer[path][section + ","s + key] != nullptr)
-        return IniBuffer[path][section + ","s + key];
+    if (IniBuffer[path][section].contains(key))
+        return IniBuffer[path][section][key];
     else 
         return defaultValue;
 }
@@ -141,7 +192,7 @@ BLITZ3D(void) IniWriteString(BBStr path, BBStr section, BBStr key, BBStr value, 
     // very simple! :DDD
     // maybe i will write one by my self but im too lazy lol
     WritePrivateProfileStringA(section, key, value, path);
-    if (updateBuffer) IniBuffer[path][section + ","s + key] = value;
+    if (updateBuffer) IniBuffer[path][section][key] = value;
 }
 
 BLITZ3D(void) IniWriteInt(BBStr path, BBStr section, BBStr key, int value, bool updateBuffer) {
@@ -181,5 +232,21 @@ BLITZ3D(void) IniClearAllBuffer() {
 * @param value          Value of key.
 */
 BLITZ3D(void) IniSetBufferValue(BBStr path, BBStr section, BBStr key, BBStr value) {
-    IniBuffer[path][section + ","s + key] = value;
+    IniBuffer[path][section][key] = value;
+}
+
+extern "C" __declspec(dllexport) map<string, map<string, BBStr>>* _stdcall IniGetBuffer(BBStr path) {
+    return &IniBuffer[path];
+}
+
+extern "C" __declspec(dllexport) map<string, map<string, map<string, BBStr>>>* _stdcall IniGetAllBuffer() {
+    return &IniBuffer;
+}
+
+BLITZ3D(void) IniSetBuffer(BBStr path, map<string, map<string, BBStr>>* buffer) {
+    IniBuffer[path] = *buffer;
+}
+
+BLITZ3D(void) IniSetAllBuffer(map<string, map<string, map<string, BBStr>>>* buffer) {
+    IniBuffer = *buffer;
 }

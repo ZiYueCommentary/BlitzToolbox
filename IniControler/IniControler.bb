@@ -1,6 +1,6 @@
 ; IniControler - A part of BlitzToolBox
 ; Write & Read ini file.
-; v1.01 2022.8.18
+; v1.02 2022.8.18
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
 Function IniWriteBuffer(path$, clearPrevious% = 1)
@@ -41,4 +41,12 @@ End Function
 
 Function IniGetBufferFloat#(path$, section$, key$, defaultValue# = 0.0)
 	Return IniGetBufferFloat_(path$, section$, key$, defaultValue#)
+End Function
+
+Function IniSectionExist%(path$, section$, allowBuffer% = 1)
+	Return IniSectionExist_(path$, section$, allowBuffer%)
+End Function
+
+Function IniKeyExist%(path$, section$, key$, allowBuffer% = 1)
+	Return IniKeyExist_%(path$, section$, key$, allowBuffer%)
 End Function

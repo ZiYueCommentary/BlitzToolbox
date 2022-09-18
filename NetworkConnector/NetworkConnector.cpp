@@ -11,7 +11,6 @@
 #include <fstream>
 #include <format>
 
-#pragma comment(lib, "wininet.lib")
 using std::string;
 
 string exec(const char* cmd) {
@@ -55,7 +54,7 @@ BLITZ3D(BBStr) GetDomainTXT(BBStr domain) {
     return getCharPtr(result);
 }
 
-BLITZ3D(int) DownloadFile(BBStr url, BBStr file)
+BLITZ3D(bool) DownloadFile(BBStr url, BBStr file)
 {
     /* https://blog.csdn.net/HW140701/article/details/78207490 */
     byte Temp[1024];
