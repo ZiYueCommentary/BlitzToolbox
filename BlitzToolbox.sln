@@ -12,6 +12,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlitzFormat", "BlitzFormat\BlitzFormat.vcxproj", "{92D30A30-4CA2-4676-B79D-4D0544135FA3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALL_BUILD", "ALL_BUILD\ALL_BUILD.vcxproj", "{8295EE11-86F5-452D-880B-F5EB47005FC2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5531DCBD-63E9-4BC4-8525-730C694542B6} = {5531DCBD-63E9-4BC4-8525-730C694542B6}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlitzEncode", "BlitzEncode\BlitzEncode.vcxproj", "{5531DCBD-63E9-4BC4-8525-730C694542B6}"
 EndProject

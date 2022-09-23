@@ -2,7 +2,7 @@
 * BlitzEncode - A part of BlitzToolbox
 * Encoding converter.
 * 
-* v1.0 2022.9.22
+* v1.0 2022.9.23
 */
 
 #include "../BlitzToolbox.hpp"
@@ -24,14 +24,12 @@ void Converter(int src, int dst, CString& str) {
     delete[] wszBuffer;
 }
 
-BLITZ3D(int) GetPageCode() {
+BLITZ3D(int) GetCodePage() {
 	return GetACP();
 }
 
-BLITZ3D(BBStr) ConvertEncoding(BBStr str, int sourcePageCode, int destPageCode) {
-    CString cstr = str;
-    Converter(sourcePageCode, destPageCode, cstr);
-    std::string result = cstr.GetBuffer();
-    delete cstr;
-    return getCharPtr(result);
+BLITZ3D(BBStr) ConvertEncoding(BBStr str, int sourceCodePage, int destCodePage) {
+    CString cstr = str; // dont delete this or you will get crash
+    Converter(sourceCodePage, destCodePage, cstr);
+    return getCharPtr(cstr.GetBuffer());
 }
