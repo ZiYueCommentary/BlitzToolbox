@@ -2,7 +2,7 @@
 * IniControler - A part of BlitzToolBox
 * Write & Read ini file.
 * 
-* v1.02 2022.8.18
+* v1.03 2022.10.3
 */
 
 #include "../BlitzToolbox.hpp"
@@ -17,7 +17,7 @@ using namespace std;
 /*
 * Buffer for ini files.
 */
-static map<string, map<string, map<string, BBStr>>> IniBuffer;
+static map<string, map<string, map<string, string>>> IniBuffer;
 
 /*
 * Write buffer for ini file.
@@ -26,8 +26,8 @@ static map<string, map<string, map<string, BBStr>>> IniBuffer;
 * @param clearPervious Clear old content of buffer.
 */
 BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPrevious) {
-    if(clearPrevious) IniBuffer[path].clear();
-    map<string, map<string, BBStr>> buffer;
+    if (clearPrevious) IniBuffer[path].clear();
+    map<string, map<string, string>> buffer;
     ifstream file(path);
     if (!file.is_open()) return;
 
@@ -44,7 +44,7 @@ BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPrevious) {
             if (key[key.length() - 1] == ' ') key = key.substr(0, key.length() - 1);
             string value = line.substr(line.find('=') + 1);
             if (value[0] == ' ') value = value.substr(1);
-            buffer[section][key] = getCharPtr(value);
+            buffer[section][key] = value;
         }
     }
     file.close();
@@ -67,7 +67,7 @@ BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPrevious) {
 BLITZ3D(BBStr) IniGetString(BBStr path, BBStr section, BBStr key, BBStr defaultValue, bool allowBuffer) {
     if (allowBuffer) { 
         if (IniBuffer[path][section].contains(key)) { // in java it will throw exception when get null
-            return IniBuffer[path][section][key]; // but in c++ it wont throw
+            return IniBuffer[path][section][key].c_str(); // but in c++ it wont throw
         }
     }
 
@@ -164,7 +164,7 @@ BLITZ3D(bool) IniBufferKeyExist(BBStr path, BBStr section, BBStr key) {
 */
 BLITZ3D(BBStr) IniGetBufferString(BBStr path, BBStr section, BBStr key, BBStr defaultValue) {
     if (IniBuffer[path][section].contains(key))
-        return IniBuffer[path][section][key];
+        return IniBuffer[path][section][key].c_str();
     else 
         return defaultValue;
 }
@@ -235,18 +235,18 @@ BLITZ3D(void) IniSetBufferValue(BBStr path, BBStr section, BBStr key, BBStr valu
     IniBuffer[path][section][key] = value;
 }
 
-extern "C" __declspec(dllexport) map<string, map<string, BBStr>>* _stdcall IniGetBuffer(BBStr path) {
+extern "C" __declspec(dllexport) map<string, map<string, string>>* _stdcall IniGetBuffer(BBStr path) {
     return &IniBuffer[path];
 }
 
-extern "C" __declspec(dllexport) map<string, map<string, map<string, BBStr>>>* _stdcall IniGetAllBuffer() {
+extern "C" __declspec(dllexport) map<string, map<string, map<string, string>>>* _stdcall IniGetAllBuffer() {
     return &IniBuffer;
 }
 
-BLITZ3D(void) IniSetBuffer(BBStr path, map<string, map<string, BBStr>>* buffer) {
+BLITZ3D(void) IniSetBuffer(BBStr path, map<string, map<string, string>>* buffer) {
     IniBuffer[path] = *buffer;
 }
 
-BLITZ3D(void) IniSetAllBuffer(map<string, map<string, map<string, BBStr>>>* buffer) {
+BLITZ3D(void) IniSetAllBuffer(map<string, map<string, map<string, string>>>* buffer) {
     IniBuffer = *buffer;
 }

@@ -8,7 +8,7 @@
 #include "../BlitzToolbox.hpp"
 #include <Windows.h>
 #include <wininet.h>
-#include <fstream>
+#include <filesystem>
 #include <format>
 
 using std::string;
@@ -83,6 +83,5 @@ BLITZ3D(bool) DownloadFile(BBStr url, BBStr file)
         hSession = NULL;
     }
 
-    std::ifstream fileStream(file, std::ios::in);
-    return fileStream.is_open();
+    return std::filesystem::exists(file);
 }

@@ -128,6 +128,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Blib\Blib.vcxproj">
+      <Project>{2412762e-2c74-4d21-826c-ec649529c625}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\BlitzEncode\BlitzEncode.vcxproj">
+      <Project>{5531dcbd-63e9-4bc4-8525-730c694542b6}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\BlitzFormat\BlitzFormat.vcxproj">
       <Project>{92d30a30-4ca2-4676-b79d-4d0544135fa3}</Project>
     </ProjectReference>

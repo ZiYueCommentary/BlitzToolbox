@@ -9,8 +9,8 @@
 #include <atlstr.h>
 
 void Converter(int src, int dst, CString& str) {
-    UINT nLen = MultiByteToWideChar(src, NULL, str, -1, NULL, NULL);
-    WCHAR* wszBuffer = new WCHAR[nLen + 1];
+    unsigned nLen = MultiByteToWideChar(src, NULL, str, -1, NULL, NULL);
+    wchar_t* wszBuffer = new wchar_t[nLen + 1];
     nLen = MultiByteToWideChar(src, NULL, str, -1, wszBuffer, nLen);
     wszBuffer[nLen] = 0;
 

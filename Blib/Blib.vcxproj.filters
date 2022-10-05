@@ -15,26 +15,38 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BlitzFormat.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="BlitzFormat.decls">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="Example.bb">
-      <Filter>资源文件</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="unzip.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="zip.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="BlitzFormat.rc">
+    <ClCompile Include="zip.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="unzip.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Blib.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Blib.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Blib.decls">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="Blib.bb">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

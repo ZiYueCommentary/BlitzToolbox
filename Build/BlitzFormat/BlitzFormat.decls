@@ -1,6 +1,6 @@
 ; BlitzFormat - A part of BlitzToolBox
 ; String formatter.
-; v1.0 2022.8.15
+; v1.1 2022.9.29
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
 .lib "BlitzFormat.dll"

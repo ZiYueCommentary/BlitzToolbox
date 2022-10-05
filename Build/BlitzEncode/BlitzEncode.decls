@@ -6,10 +6,9 @@
 .lib "BlitzEncode.dll"
 
 ConvertEncoding$(txt$, sourceCodePage%, destCodePage%):"_ConvertEncoding@12"
-GetCodePage%():"_GetPageCode@0"
+GetCodePage%():"_GetCodePage@0"
 
 ; header file
-
 .lib " "
 
 ConvertANSItoUTF8$(txt$)

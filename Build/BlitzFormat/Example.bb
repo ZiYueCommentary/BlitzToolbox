@@ -1,2 +1,5 @@
-Print Format3("The time is: {0}, {1}, {2}", CurrentTime(), "Hello World!", 1234567)
+Print Format("{:6}", 42)
+Print Format("{:*<6}", "x")
+Print Format("{0}, {0}, {0}, {0}", 1)
+Print Format3("{}, {}, {}", CurrentTime(), CurrentDate(), 123456)
 WaitKey
