@@ -2,7 +2,7 @@
 * NetworkConnector - A part of BlitzToolbox
 * Parse domain's TXT and download files.
 * 
-* v1.0 2022.8.14
+* v1.01 2022.10.6
 */
 
 #include "../BlitzToolbox.hpp"
@@ -13,7 +13,7 @@
 
 using std::string;
 
-string exec(const char* cmd) {
+inline string exec(const char* cmd) {
     FILE* pipe = _popen(cmd, "r");
     if (!pipe) return "";
     char buffer[128];
@@ -25,7 +25,7 @@ string exec(const char* cmd) {
     return result;
 }
 
-string clearTabLeft(string src) {
+inline string clearTabLeft(string src) {
     unsigned int pos = 0;
     string result = src;
     for (;;) {

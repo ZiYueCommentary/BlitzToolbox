@@ -2,6 +2,7 @@
 * Header file of BlitzToolbox.
 */
 
+#pragma once
 #include <string>
 
 #define BLITZ3D(x) extern "C" __declspec(dllexport) x _stdcall

@@ -1,6 +1,6 @@
 ; NetworkConnector - A part of BlitzToolbox
 ; Parse domain's TXT and download files.
-; v1.0 2022.8.14
+; v1.01 2022.10.6
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
 .lib "NetworkConnector.dll"
