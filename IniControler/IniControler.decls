@@ -1,6 +1,6 @@
 ; IniControler - A part of BlitzToolBox
 ; Write & Read ini file.
-; v1.03 2022.10.3
+; v1.04 2022.10.15
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
 .lib "IniControler.dll"
@@ -28,6 +28,12 @@ IniWriteInt_(path$, section$, key$, value%, updateBuffer%):"_IniWriteInt@20"
 IniWriteFloat_(path$, section$, key$, value#, updateBuffer%):"_IniWriteFloat@20"
 IniSectionExist_%(path$, section$, allowBuffer%):"_IniSectionExist@12"
 IniKeyExist_%(path$, section$, key$, allowBuffer%):"_IniKeyExist@16"
+IniExportJson_(path$, json$, isMin%, stringOnly%, allowBuffer%):"_IniExportJson@20"
+IniBufferExportJson_(path$, json$, isMin%, stringOnly%):"_IniBufferExportJson@16"
+IniExportHtml_(path$, html$, isMin%, isList%, allowBuffer%):"_IniExportHtml@20"
+IniBufferExportHtml_(path$, html$, isMin%, isList%):"_IniBufferExportHtml@16"
+IniExportXml_(path$, xml$, isMin%, allowBuffer%):"_IniExportXml@16"
+IniBufferExportXml_(path$, xml$, isMin%):"_IniBufferExportXml@12"
 
 ; Header File :DDD
 .lib " "
@@ -44,3 +50,9 @@ IniWriteInt(path$, section$, key$, value%, updateBuffer%)
 IniWriteFloat(path$, section$, key$, value#, updateBuffer%)
 IniSectionExist%(path$, section$, allowBuffer%)
 IniKeyExist%(path$, section$, key$, allowBuffer%)
+IniExportJson(path$, json$, isMin%, stringOnly%, allowBuffer%)
+IniBufferExportJson(path$, json$, isMin%, stringOnly%)
+IniExportHtml(path$, html$, isMin%, isList%, allowBuffer%)
+IniBufferExportHtml(path$, html$, isMin%, isList%)
+IniExportXml(path$, xml$, isMin%, allowBuffer%)
+IniBufferExportXml(path$, xml$, isMin%)

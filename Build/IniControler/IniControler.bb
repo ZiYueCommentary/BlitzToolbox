@@ -1,6 +1,6 @@
 ; IniControler - A part of BlitzToolBox
 ; Write & Read ini file.
-; v1.03 2022.10.3
+; v1.04 2022.10.11
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
 Function IniWriteBuffer(path$, clearPrevious% = 1)
@@ -49,4 +49,28 @@ End Function
 
 Function IniKeyExist%(path$, section$, key$, allowBuffer% = 1)
 	Return IniKeyExist_%(path$, section$, key$, allowBuffer%)
+End Function
+
+Function IniExportJson(path$, json$, isMin% = 0, stringOnly% = 0, allowBuffer% = 1)
+	IniExportJson_(path$, json$, isMin%, stringOnly%, allowBuffer%)
+End Function
+
+Function IniBufferExportJson(path$, json$, isMin% = 0, stringOnly% = 0)
+	IniBufferExportJson_(path$, json$, isMin%, stringOnly%)
+End Function
+
+Function IniExportHtml(path$, html$, isMin% = 0, isList% = 0, allowBuffer% = 1)
+	IniExportHtml_(path$, html$, isMin%, isList%, allowBuffer%)
+End Function
+
+Function IniBufferExportHtml(path$, html$, isMin% = 0, isList% = 0)
+	IniBufferExportHtml_(path$, html$, isMin%, isList%)
+End Function
+
+Function IniExportXml(path$, xml$, isMin% = 0, allowBuffer% = 0)
+	IniExportXml_(path$, xml$, isMin%, allowBuffer%)
+End Function
+
+Function IniBufferExportXml(path$, xml$, isMin% = 0)
+	IniBufferExportXml_(path$, xml$, isMin%)
 End Function
