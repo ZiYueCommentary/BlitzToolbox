@@ -451,10 +451,9 @@ void ExportXml(map<string, map<string, string>>&& sectionBuffer, BBStr file, BBS
     ofstream xml(path);
     const char* endl = isMin ? "" : "\n";
     const char* indent = isMin ? "" : "    ";
-    const string filename = BlitzToolBox::replace_all(
-            filesystem::path(file).filename().generic_string(), 
-            filesystem::path(file).filename().extension().generic_string(), 
-            "");
+    string filename = filesystem::path(file).filename().generic_string();
+    const string filexten = filesystem::path(file).filename().extension().generic_string();
+    filename = filename.substr(filename.rfind(filexten));
     xml << "<?xml version=\"1.0\"?>" << endl;
     if (!isMin) {
         xml << "<!--" << endl;
@@ -462,7 +461,7 @@ void ExportXml(map<string, map<string, string>>&& sectionBuffer, BBStr file, BBS
         xml << indent << "https://github.com/ZiYueCommentary/BlitzToolbox" << endl;
         xml << "-->" << endl << endl;
     }
-    xml << "<" << BlitzToolBox::xml_friendly_string(filename) << ">" << endl;
+    xml << "<file name=\"" << BlitzToolBox::json_friendly_string(filename) << "\">" << endl; // json friendly == " -> \"
     for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
         xml << indent << "<section>" << endl;
         xml << indent << indent << "<name>" << BlitzToolBox::xml_friendly_string(section->first) << "</name>" << endl;
@@ -475,7 +474,7 @@ void ExportXml(map<string, map<string, string>>&& sectionBuffer, BBStr file, BBS
         }
         xml << indent << "</section>" << endl;
     }
-    xml << "</" << BlitzToolBox::xml_friendly_string(filename) << ">" << endl;
+    xml << "</file>" << endl;
     xml.close();
 }
 
