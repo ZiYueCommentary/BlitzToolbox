@@ -2,11 +2,10 @@
 * IniControler - A part of BlitzToolBox
 * Write & Read ini file.
 * 
-* v1.04 2022.10.11
+* v1.05 2022.10.28
 */
 
 #include "../BlitzToolbox.hpp"
-#include "../BlitzToolFuncs.hpp"
 #include <map>
 #include <fstream>
 #include <windows.h>
@@ -92,6 +91,7 @@ BLITZ3D(BBStr) IniGetString(BBStr path, BBStr section, BBStr key, BBStr defaultV
             }
         }
     }
+    file.close();
     return defaultValue;
 }
 
@@ -117,8 +117,8 @@ BLITZ3D(bool) IniSectionExist(BBStr path, BBStr section, bool allowBuffer) {
             section1 = string(line, 1, line.length() - 2);
             if (section == section1) return true;
         }
-        continue;
     }
+    file.close();
     return false;
 }
 
@@ -147,6 +147,7 @@ BLITZ3D(bool) IniKeyExist(BBStr path, BBStr section, BBStr key, bool allowBuffer
             if ((section1 == section) && (key == key1)) return true;
         }
     }
+    file.close();
     return false;
 }
 
@@ -191,9 +192,8 @@ BLITZ3D(float) IniGetBufferFloat(BBStr path, BBStr section, BBStr key, float def
 * @param updateBuffer   Update value of buffer.
 */
 BLITZ3D(void) IniWriteString(BBStr path, BBStr section, BBStr key, BBStr value, bool updateBuffer) {
-    // very simple! :DDD
     // maybe i will write one by my self but im too lazy lol
-    WritePrivateProfileStringA(section, key, value, path);
+    WritePrivateProfileStringA(section, key, value, filesystem::absolute(path).generic_string().c_str());
     if (updateBuffer) IniBuffer[path][section][key] = value;
 }
 
@@ -203,6 +203,28 @@ BLITZ3D(void) IniWriteInt(BBStr path, BBStr section, BBStr key, int value, bool 
 
 BLITZ3D(void) IniWriteFloat(BBStr path, BBStr section, BBStr key, float value, bool updateBuffer) {
     IniWriteString(path, section, key, to_string(value).c_str(), updateBuffer);
+}
+
+BLITZ3D(void) IniRemoveKey(BBStr path, BBStr section, BBStr key, bool updateBuffer) {
+    WritePrivateProfileStringA(section, key, NULL, filesystem::absolute(path).generic_string().c_str());
+    if (updateBuffer) IniBuffer[path][section].erase(key);
+}
+
+BLITZ3D(void) IniCreateSection(BBStr path, BBStr section) {
+    WritePrivateProfileSectionA(section, "", filesystem::absolute(path).generic_string().c_str());
+}
+
+BLITZ3D(void) IniRemoveSection(BBStr path, BBStr section, bool updateBuffer) {
+    WritePrivateProfileSectionA(section, NULL, filesystem::absolute(path).generic_string().c_str());
+    if (updateBuffer) IniBuffer[path].erase(section);
+}
+
+BLITZ3D(void) IniRemoveBufferKey(BBStr path, BBStr section, BBStr key) {
+    IniBuffer[path][section].erase(key);
+}
+
+BLITZ3D(void) IniRemoveBufferSection(BBStr path, BBStr section) {
+    IniBuffer[path].erase(section);
 }
 
 /* BUFFER */
@@ -237,6 +259,10 @@ BLITZ3D(void) IniSetBufferValue(BBStr path, BBStr section, BBStr key, BBStr valu
     IniBuffer[path][section][key] = value;
 }
 
+BLITZ3D(void) IniSetExportBufferValue(map<string, map<string, string>>* buffer, BBStr section, BBStr key, BBStr value) {
+    (*buffer)[section][key] = value;
+}
+
 extern "C" __declspec(dllexport) map<string, map<string, string>>* _stdcall IniGetBuffer(BBStr path) {
     return &IniBuffer[path];
 }
@@ -253,7 +279,7 @@ BLITZ3D(void) IniSetAllBuffer(map<string, map<string, map<string, string>>>* buf
     IniBuffer = *buffer;
 }
 
-/* JSON */
+/* EXPORT */
 
 map<string, map<string, string>>* GetIniMap(BBStr path, bool allowBuffer) {
     map<string, map<string, string>>* buffer;
@@ -286,6 +312,30 @@ map<string, map<string, string>>* GetIniMap(BBStr path, bool allowBuffer) {
     return buffer;
 }
 
+/* INI */
+void ExportIni(map<string, map<string, string>>&& sectionBuffer, BBStr path, bool isMin) {
+    ofstream ini(path);
+    const char* space = isMin ? "" : " ";
+    for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
+        map<string, string>& keyBuffer = sectionBuffer[section->first];
+        ini << "[" << section->first << "]" << endl;
+        for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
+            ini << key->first << space << "=" << space << keyBuffer[key->first] << endl;
+        }
+        if (!isMin) ini << endl;
+    }
+    ini.close();
+}
+
+BLITZ3D(void) IniExportIni(BBStr path, BBStr ini, bool isMin, bool allowBuffer) {
+    ExportIni(std::move(*GetIniMap(path, allowBuffer)), ini, isMin);
+}
+
+BLITZ3D(void) IniBufferExportIni(BBStr path, BBStr ini, bool isMin) {
+    ExportIni(std::move(IniBuffer[path]), ini, isMin);
+}
+
+/* JSON */
 // i dont know what is "rvalue reference" but i will have a try
 void ExportJson(map<string, map<string, string>>&& sectionBuffer, BBStr path, bool isMin, bool stringOnly) {
     ofstream json(path);
@@ -319,6 +369,7 @@ void ExportJson(map<string, map<string, string>>&& sectionBuffer, BBStr path, bo
         json << indent << "}" << (section == --sectionBuffer.end() ? "" : ",") << endl;
     }
     json << "}";
+    json.close();
 }
 
 BLITZ3D(void) IniExportJson(BBStr path, BBStr json, bool isMin, bool stringOnly, bool allowBuffer) {
@@ -330,7 +381,6 @@ BLITZ3D(void) IniBufferExportJson(BBStr path, BBStr json, bool isMin, bool strin
 }
 
 /* HTML */
-
 void ExportHtml(map<string, map<string, string>>&& sectionBuffer, BBStr file, BBStr path, bool isMin, bool isList) {
     ofstream html(path);
     const char* endl = isMin ? "" : "\n";
@@ -385,6 +435,7 @@ void ExportHtml(map<string, map<string, string>>&& sectionBuffer, BBStr file, BB
     html << indent << "Generate by <i>IniControler</i> of <a href=\"https://github.com/ZiYueCommentary/BlitzToolbox\" target=\"_blank\">BlitzToolbox</a>.";
     html << endl;
     html << "</html>";
+    html.close();
 }
 
 BLITZ3D(void) IniExportHtml(BBStr path, BBStr html, bool isMin, bool isList, bool allowBuffer) {
@@ -396,30 +447,36 @@ BLITZ3D(void) IniBufferExportHtml(BBStr path, BBStr html, bool isMin, bool isLis
 }
 
 /* XML */
-
 void ExportXml(map<string, map<string, string>>&& sectionBuffer, BBStr file, BBStr path, bool isMin) {
     ofstream xml(path);
     const char* endl = isMin ? "" : "\n";
     const char* indent = isMin ? "" : "    ";
+    const string filename = BlitzToolBox::replace_all(
+            filesystem::path(file).filename().generic_string(), 
+            filesystem::path(file).filename().extension().generic_string(), 
+            "");
+    xml << "<?xml version=\"1.0\"?>" << endl;
     if (!isMin) {
         xml << "<!--" << endl;
         xml << indent << "Generate by \"IniControler\" of BlitzToolbox." << endl;
         xml << indent << "https://github.com/ZiYueCommentary/BlitzToolbox" << endl;
         xml << "-->" << endl << endl;
     }
-    xml << "<?xml version=\"1.0\"?>" << endl;
+    xml << "<" << BlitzToolBox::xml_friendly_string(filename) << ">" << endl;
     for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
-        xml << "<section>" << endl;
-        xml << indent << "<name>" << BlitzToolBox::xml_friendly_string(section->first) << "</name>" << endl;
+        xml << indent << "<section>" << endl;
+        xml << indent << indent << "<name>" << BlitzToolBox::xml_friendly_string(section->first) << "</name>" << endl;
         map<string, string>& keyBuffer = sectionBuffer[section->first];
         for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
-            xml << indent << "<key>" << endl;
-            xml << indent << indent << "<name>" << BlitzToolBox::xml_friendly_string(key->first) << "</name>" << endl;
-            xml << indent << indent << "<value>" << BlitzToolBox::xml_friendly_string(keyBuffer[key->first]) << "</value>" << endl;
-            xml << indent << "</key>" << endl;
+            xml << indent << indent << "<key>" << endl;
+            xml << indent << indent << indent << "<name>" << BlitzToolBox::xml_friendly_string(key->first) << "</name>" << endl;
+            xml << indent << indent << indent << "<value>" << BlitzToolBox::xml_friendly_string(keyBuffer[key->first]) << "</value>" << endl;
+            xml << indent << indent << "</key>" << endl;
         }
-        xml << "</section>" << endl;
+        xml << indent << "</section>" << endl;
     }
+    xml << "</" << BlitzToolBox::xml_friendly_string(filename) << ">" << endl;
+    xml.close();
 }
 
 BLITZ3D(void) IniExportXml(BBStr path, BBStr xml, bool isMin, bool allowBuffer) {

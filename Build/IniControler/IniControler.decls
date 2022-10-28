@@ -1,6 +1,6 @@
 ; IniControler - A part of BlitzToolBox
 ; Write & Read ini file.
-; v1.04 2022.10.15
+; v1.05 2022.10.28
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
 .lib "IniControler.dll"
@@ -14,6 +14,10 @@ IniGetAllBuffer%():"_IniGetAllBuffer@0"
 IniSetBuffer(path$, buffer%):"_IniSetBuffer@8"
 IniSetAllBuffer(buffer%):"_IniSetAllBuffer@4"
 IniBufferKeyExist%(path$, section$, key$):"_IniBufferKeyExist@12"
+IniCreateSection(path$, section$):"_IniCreateSection@8"
+IniRemoveBufferKey(path$, section$, key$):"_IniRemoveBufferKey@12"
+IniRemoveBufferSection(path$, section$):"_IniRemoveBufferSection@8"
+IniSetExportBufferValue(buffer%, section$, key$, value$)"_IniSetExportBufferValue@16"
 
 ; they have default parameters so you need include "IniControler.bb"
 IniWriteBuffer_(path$, clearPrevious%):"_IniWriteBuffer@8"
@@ -34,6 +38,10 @@ IniExportHtml_(path$, html$, isMin%, isList%, allowBuffer%):"_IniExportHtml@20"
 IniBufferExportHtml_(path$, html$, isMin%, isList%):"_IniBufferExportHtml@16"
 IniExportXml_(path$, xml$, isMin%, allowBuffer%):"_IniExportXml@16"
 IniBufferExportXml_(path$, xml$, isMin%):"_IniBufferExportXml@12"
+IniRemoveKey_(path$, section$, key$, updateBuffer%):"_IniRemoveKey@16"
+IniRemoveSection_(path$, section$, updateBuffer%):"_IniRemoveSection@12"
+IniExportIni_(path$, ini$, isMin%, allowBuffer%):"_IniExportIni@16"
+IniBufferExportIni_(path$, ini$, isMin%):"_IniBufferExportIni@12"
 
 ; Header File :DDD
 .lib " "
@@ -56,3 +64,7 @@ IniExportHtml(path$, html$, isMin%, isList%, allowBuffer%)
 IniBufferExportHtml(path$, html$, isMin%, isList%)
 IniExportXml(path$, xml$, isMin%, allowBuffer%)
 IniBufferExportXml(path$, xml$, isMin%)
+IniRemoveKey(path$, section$, key$, updateBuffer%)
+IniRemoveSection(path$, section$, updateBuffer%)
+IniExportIni(path$, ini$, isMin%, allowBuffer%)
+IniBufferExportIni(path$, ini$, isMin%)
