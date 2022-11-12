@@ -2,6 +2,8 @@
 // Microsoft Visual C++ generated include file.
 // Used by IniControler.rc
 
+//#define UNORDERED_MAP
+
 // 新对象的下一组默认值
 // 
 #ifdef APSTUDIO_INVOKED

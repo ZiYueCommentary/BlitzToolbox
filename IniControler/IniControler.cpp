@@ -2,14 +2,24 @@
 * IniControler - A part of BlitzToolBox
 * Write & Read ini file.
 *
-* v1.05 2022.10.28
+* v1.06 2022.11.12
 */
 
+#include "resource.h"
 #include "../BlitzToolbox.hpp"
-#include <map>
 #include <fstream>
 #include <windows.h>
 #include <filesystem>
+
+#ifdef UNORDERED_MAP // see "resource.h"
+#include <unordered_map>
+template<typename T, typename V>
+using IniMap = std::unordered_map<T, V>;
+#else
+#include <map>
+template<typename T, typename V>
+using IniMap = std::map<T, V>;
+#endif
 
 using namespace std;
 
@@ -18,7 +28,7 @@ using namespace std;
 /*
 * Buffer for ini files.
 */
-static map<string, map<string, map<string, string>>> IniBuffer;
+static IniMap<string, IniMap<string, IniMap<string, string>>> IniBuffer;
 
 /*
 * Write buffer for ini file.
@@ -28,7 +38,7 @@ static map<string, map<string, map<string, string>>> IniBuffer;
 */
 BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPrevious) {
 	if (clearPrevious) IniBuffer[path].clear();
-	map<string, map<string, string>> buffer;
+	IniMap<string, IniMap<string, string>> buffer;
 	ifstream file(path);
 	if (!file.is_open()) return;
 
@@ -259,35 +269,35 @@ BLITZ3D(void) IniSetBufferValue(BBStr path, BBStr section, BBStr key, BBStr valu
 	IniBuffer[path][section][key] = value;
 }
 
-BLITZ3D(void) IniSetExportBufferValue(map<string, map<string, string>>* buffer, BBStr section, BBStr key, BBStr value) {
+BLITZ3D(void) IniSetExportBufferValue(IniMap<string, IniMap<string, string>>* buffer, BBStr section, BBStr key, BBStr value) {
 	(*buffer)[section][key] = value;
 }
 
-extern "C" __declspec(dllexport) map<string, map<string, string>>* _stdcall IniGetBuffer(BBStr path) {
+extern "C" __declspec(dllexport) IniMap<string, IniMap<string, string>>*_stdcall IniGetBuffer(BBStr path) {
 	return &IniBuffer[path];
 }
 
-extern "C" __declspec(dllexport) map<string, map<string, map<string, string>>>* _stdcall IniGetAllBuffer() {
+extern "C" __declspec(dllexport) IniMap<string, IniMap<string, IniMap<string, string>>>*_stdcall IniGetAllBuffer() {
 	return &IniBuffer;
 }
 
-BLITZ3D(void) IniSetBuffer(BBStr path, map<string, map<string, string>>* buffer) {
+BLITZ3D(void) IniSetBuffer(BBStr path, IniMap<string, IniMap<string, string>>* buffer) {
 	IniBuffer[path] = *buffer;
 }
 
-BLITZ3D(void) IniSetAllBuffer(map<string, map<string, map<string, string>>>* buffer) {
+BLITZ3D(void) IniSetAllBuffer(IniMap<string, IniMap<string, IniMap<string, string>>>* buffer) {
 	IniBuffer = *buffer;
 }
 
 /* EXPORT */
 
-map<string, map<string, string>>* GetIniMap(BBStr path, bool allowBuffer) {
-	map<string, map<string, string>>* buffer;
+IniMap<string, IniMap<string, string>>* GetIniMap(BBStr path, bool allowBuffer) {
+	IniMap<string, IniMap<string, string>>* buffer;
 	if (allowBuffer && IniBuffer.contains(path)) {
 		buffer = &IniBuffer[path];
 	}
 	else {
-		buffer = new map<string, map<string, string>>();
+		buffer = new IniMap<string, IniMap<string, string>>();
 		ifstream file(path);
 		if (!file.is_open()) return buffer;
 
@@ -313,11 +323,11 @@ map<string, map<string, string>>* GetIniMap(BBStr path, bool allowBuffer) {
 }
 
 /* INI */
-void ExportIni(map<string, map<string, string>>&& sectionBuffer, BBStr path, bool isMin) {
+void ExportIni(IniMap<string, IniMap<string, string>>&& sectionBuffer, BBStr path, bool isMin) {
 	ofstream ini(path);
 	const char* space = isMin ? "" : " ";
 	for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
-		map<string, string>& keyBuffer = sectionBuffer[section->first];
+		IniMap<string, string>& keyBuffer = sectionBuffer[section->first];
 		ini << "[" << section->first << "]" << endl;
 		for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
 			ini << key->first << space << "=" << space << keyBuffer[key->first] << endl;
@@ -337,7 +347,7 @@ BLITZ3D(void) IniBufferExportIni(BBStr path, BBStr ini, bool isMin) {
 
 /* JSON */
 // i dont know what is "rvalue reference" but i will have a try
-void ExportJson(map<string, map<string, string>>&& sectionBuffer, BBStr path, bool isMin, bool stringOnly) {
+void ExportJson(IniMap<string, IniMap<string, string>>&& sectionBuffer, BBStr path, bool isMin, bool stringOnly) {
 	ofstream json(path);
 	const char* endl = isMin ? "" : "\n";
 	const char* indent = isMin ? "" : "    ";
@@ -345,7 +355,7 @@ void ExportJson(map<string, map<string, string>>&& sectionBuffer, BBStr path, bo
 	json << "{" << endl;
 	for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
 		json << indent << "\"" << BlitzToolBox::json_friendly_string(section->first) << "\":" << space << "{" << endl;
-		map<string, string>& keyBuffer = sectionBuffer[section->first];
+		IniMap<string, string>& keyBuffer = sectionBuffer[section->first];
 		for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
 			string value = BlitzToolBox::json_friendly_string(keyBuffer[key->first]);
 			if (stringOnly) {
@@ -381,7 +391,7 @@ BLITZ3D(void) IniBufferExportJson(BBStr path, BBStr json, bool isMin, bool strin
 }
 
 /* HTML */
-void ExportHtml(map<string, map<string, string>>&& sectionBuffer, BBStr file, BBStr path, bool isMin, bool isList) {
+void ExportHtml(IniMap<string, IniMap<string, string>>&& sectionBuffer, BBStr file, BBStr path, bool isMin, bool isList) {
 	ofstream html(path);
 	const char* endl = isMin ? "" : "\n";
 	const char* indent = isMin ? "" : "    ";
@@ -401,7 +411,7 @@ void ExportHtml(map<string, map<string, string>>&& sectionBuffer, BBStr file, BB
 			html << indent << indent << "<li>" << endl;
 			html << indent << indent << indent << "<b>" << BlitzToolBox::html_friendly_string(section->first) << "</b>" << endl;
 			html << indent << indent << indent << "<ul>" << endl;
-			map<string, string>& keyBuffer = sectionBuffer[section->first];
+			IniMap<string, string>& keyBuffer = sectionBuffer[section->first];
 			for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
 				html << indent << indent << indent << indent << "<li><i>" << BlitzToolBox::html_friendly_string(key->first) << "</i> - " << BlitzToolBox::html_friendly_string(keyBuffer[key->first]) << "</li>" << endl;
 			}
@@ -420,7 +430,7 @@ void ExportHtml(map<string, map<string, string>>&& sectionBuffer, BBStr file, BB
 		html << indent << indent << "</tr>" << endl;
 		for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
 			html << indent << indent << "<tr>" << endl;
-			map<string, string>& keyBuffer = sectionBuffer[section->first];
+			IniMap<string, string>& keyBuffer = sectionBuffer[section->first];
 			html << indent << indent << indent << "<td rowspan=\"" << keyBuffer.size() << "\">" << BlitzToolBox::html_friendly_string(section->first) << "</td>" << endl;
 			for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
 				if (key != keyBuffer.begin())
@@ -447,7 +457,7 @@ BLITZ3D(void) IniBufferExportHtml(BBStr path, BBStr html, bool isMin, bool isLis
 }
 
 /* XML */
-void ExportXml(map<string, map<string, string>>&& sectionBuffer, BBStr file, BBStr path, bool isMin) {
+void ExportXml(IniMap<string, IniMap<string, string>>&& sectionBuffer, BBStr file, BBStr path, bool isMin) {
 	ofstream xml(path);
 	const char* endl = isMin ? "" : "\n";
 	const char* indent = isMin ? "" : "    ";
@@ -465,7 +475,7 @@ void ExportXml(map<string, map<string, string>>&& sectionBuffer, BBStr file, BBS
 	for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
 		xml << indent << "<section>" << endl;
 		xml << indent << indent << "<name>" << BlitzToolBox::xml_friendly_string(section->first) << "</name>" << endl;
-		map<string, string>& keyBuffer = sectionBuffer[section->first];
+		IniMap<string, string>& keyBuffer = sectionBuffer[section->first];
 		for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
 			xml << indent << indent << "<key>" << endl;
 			xml << indent << indent << indent << "<name>" << BlitzToolBox::xml_friendly_string(key->first) << "</name>" << endl;
