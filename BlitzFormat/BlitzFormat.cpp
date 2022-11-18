@@ -2,7 +2,7 @@
 * BlitzFormat - A part of BlitzToolBox
 * String formatter.
 *
-* v1.1 2022.9.29
+* v1.11 2022.11.19
 */
 
 #include "../BlitzToolbox.hpp"
@@ -14,7 +14,7 @@
 // i dont know why but this lib will get c++ runtime error when you do some complex format
 
 template<typename... Args>
-std::string format(const std::string fmt, Args... args) {
+std::string format(const std::string&& fmt, const Args&... args) {
 	return std::vformat(fmt, std::make_format_args(args...));
 }
 

@@ -22,10 +22,3 @@ BlibZipEntryComSize%(zipentry%):"_BlibZipEntryComSize@4"
 BlibZipEntryUncomSize%(zipentry%):"_BlibZipEntryUncomSize@4"
 BlibHzipUnused%(hzip%):"_BlibHzipUnused@4"
 BlibUnzip(zip$, dst$, password$):"_BlibUnzip@12"
-
-; header file
-
-.lib " "
-
-BlibCreateZip%(file$, password$)
-BlibOpenZip%(file$, password$)

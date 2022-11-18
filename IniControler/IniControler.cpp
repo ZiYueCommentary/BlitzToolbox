@@ -1,5 +1,5 @@
 /*
-* IniControler - A part of BlitzToolBox
+* IniControler - A part of BlitzToolbox
 * Write & Read ini file.
 *
 * v1.06 2022.11.12
@@ -13,11 +13,11 @@
 
 #ifdef UNORDERED_MAP // see "resource.h"
 #include <unordered_map>
-template<typename T, typename V>
+template <typename T, typename V>
 using IniMap = std::unordered_map<T, V>;
 #else
 #include <map>
-template<typename T, typename V>
+template <typename T, typename V>
 using IniMap = std::map<T, V>;
 #endif
 
@@ -354,10 +354,10 @@ void ExportJson(IniMap<string, IniMap<string, string>>&& sectionBuffer, BBStr pa
 	const char* space = isMin ? "" : " ";
 	json << "{" << endl;
 	for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
-		json << indent << "\"" << BlitzToolBox::json_friendly_string(section->first) << "\":" << space << "{" << endl;
+		json << indent << "\"" << BlitzToolbox::json_friendly_string(section->first) << "\":" << space << "{" << endl;
 		IniMap<string, string>& keyBuffer = sectionBuffer[section->first];
 		for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
-			string value = BlitzToolBox::json_friendly_string(keyBuffer[key->first]);
+			string value = BlitzToolbox::json_friendly_string(keyBuffer[key->first]);
 			if (stringOnly) {
 				value = "\"" + value + "\"";
 			}
@@ -374,7 +374,7 @@ void ExportJson(IniMap<string, IniMap<string, string>>&& sectionBuffer, BBStr pa
 			else {
 				value = "\"" + value + "\"";
 			}
-			json << indent << indent << "\"" << BlitzToolBox::json_friendly_string(key->first) << "\":" << space << value << (key == --keyBuffer.end() ? "" : ",") << endl;
+			json << indent << indent << "\"" << BlitzToolbox::json_friendly_string(key->first) << "\":" << space << value << (key == --keyBuffer.end() ? "" : ",") << endl;
 		}
 		json << indent << "}" << (section == --sectionBuffer.end() ? "" : ",") << endl;
 	}
@@ -409,11 +409,11 @@ void ExportHtml(IniMap<string, IniMap<string, string>>&& sectionBuffer, BBStr fi
 		for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
 			html << endl;
 			html << indent << indent << "<li>" << endl;
-			html << indent << indent << indent << "<b>" << BlitzToolBox::html_friendly_string(section->first) << "</b>" << endl;
+			html << indent << indent << indent << "<b>" << BlitzToolbox::html_friendly_string(section->first) << "</b>" << endl;
 			html << indent << indent << indent << "<ul>" << endl;
 			IniMap<string, string>& keyBuffer = sectionBuffer[section->first];
 			for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
-				html << indent << indent << indent << indent << "<li><i>" << BlitzToolBox::html_friendly_string(key->first) << "</i> - " << BlitzToolBox::html_friendly_string(keyBuffer[key->first]) << "</li>" << endl;
+				html << indent << indent << indent << indent << "<li><i>" << BlitzToolbox::html_friendly_string(key->first) << "</i> - " << BlitzToolbox::html_friendly_string(keyBuffer[key->first]) << "</li>" << endl;
 			}
 			html << indent << indent << indent << "</ul>" << endl;
 			html << indent << indent << "</li>";
@@ -431,12 +431,12 @@ void ExportHtml(IniMap<string, IniMap<string, string>>&& sectionBuffer, BBStr fi
 		for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
 			html << indent << indent << "<tr>" << endl;
 			IniMap<string, string>& keyBuffer = sectionBuffer[section->first];
-			html << indent << indent << indent << "<td rowspan=\"" << keyBuffer.size() << "\">" << BlitzToolBox::html_friendly_string(section->first) << "</td>" << endl;
+			html << indent << indent << indent << "<td rowspan=\"" << keyBuffer.size() << "\">" << BlitzToolbox::html_friendly_string(section->first) << "</td>" << endl;
 			for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
 				if (key != keyBuffer.begin())
 					html << indent << indent << "<tr>" << endl;
-				html << indent << indent << indent << "<td>" << BlitzToolBox::html_friendly_string(key->first) << "</td>" << endl;
-				html << indent << indent << indent << "<td>" << BlitzToolBox::html_friendly_string(keyBuffer[key->first]) << "</td>" << endl;
+				html << indent << indent << indent << "<td>" << BlitzToolbox::html_friendly_string(key->first) << "</td>" << endl;
+				html << indent << indent << indent << "<td>" << BlitzToolbox::html_friendly_string(keyBuffer[key->first]) << "</td>" << endl;
 				html << indent << indent << "</tr>" << endl;
 			}
 		}
@@ -471,15 +471,15 @@ void ExportXml(IniMap<string, IniMap<string, string>>&& sectionBuffer, BBStr fil
 		xml << indent << "https://github.com/ZiYueCommentary/BlitzToolbox" << endl;
 		xml << "-->" << endl << endl;
 	}
-	xml << "<file name=\"" << BlitzToolBox::json_friendly_string(filename) << "\">" << endl; // json friendly == " -> \"
+	xml << "<file name=\"" << BlitzToolbox::json_friendly_string(filename) << "\">" << endl; // json friendly == " -> \"
 	for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
 		xml << indent << "<section>" << endl;
-		xml << indent << indent << "<name>" << BlitzToolBox::xml_friendly_string(section->first) << "</name>" << endl;
+		xml << indent << indent << "<name>" << BlitzToolbox::xml_friendly_string(section->first) << "</name>" << endl;
 		IniMap<string, string>& keyBuffer = sectionBuffer[section->first];
 		for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
 			xml << indent << indent << "<key>" << endl;
-			xml << indent << indent << indent << "<name>" << BlitzToolBox::xml_friendly_string(key->first) << "</name>" << endl;
-			xml << indent << indent << indent << "<value>" << BlitzToolBox::xml_friendly_string(keyBuffer[key->first]) << "</value>" << endl;
+			xml << indent << indent << indent << "<name>" << BlitzToolbox::xml_friendly_string(key->first) << "</name>" << endl;
+			xml << indent << indent << indent << "<value>" << BlitzToolbox::xml_friendly_string(keyBuffer[key->first]) << "</value>" << endl;
 			xml << indent << indent << "</key>" << endl;
 		}
 		xml << indent << "</section>" << endl;
