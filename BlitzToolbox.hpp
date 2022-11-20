@@ -3,7 +3,7 @@
 */
 
 #pragma once
-#include <sstream>
+#include <string>
 #include <vector>
 
 #define BLITZ3D(x) extern "C" __declspec(dllexport) x _stdcall
