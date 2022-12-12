@@ -1,4 +1,4 @@
-# BlitzToolBox
+# BlitzToolbox
 
 ![License: MIT](https://badgen.net/badge/License/MIT/red)
 ![Language: C++](https://badgen.net/badge/Language/C++)
