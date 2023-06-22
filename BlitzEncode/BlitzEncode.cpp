@@ -31,5 +31,5 @@ BLITZ3D(int) GetCodePage() {
 BLITZ3D(BBStr) ConvertEncoding(BBStr str, int sourceCodePage, int destCodePage) {
 	CString cstr = str; // dont delete this or you will get crash
 	Converter(sourceCodePage, destCodePage, cstr);
-	return getCharPtr(cstr.GetBuffer());
+	return BlitzToolbox::getCharPtr(cstr.GetBuffer());
 }

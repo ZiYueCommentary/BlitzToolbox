@@ -9,14 +9,14 @@
 #define BLITZ3D(x) extern "C" __declspec(dllexport) x _stdcall
 typedef const char* BBStr;
 
-_NODISCARD inline BBStr getCharPtr(const std::string& str) {
-    char* cha = new char[str.size() + 1];
-    memcpy(cha, str.c_str(), str.size() + 1);
-    const char* p = cha;
-    return p;
-}
-
 namespace BlitzToolbox {
+    _NODISCARD inline BBStr getCharPtr(const std::string& str) {
+        char* cha = new char[str.size() + 1];
+        memcpy(cha, str.c_str(), str.size() + 1);
+        const char* p = cha;
+        return p;
+    }
+    
     _NODISCARD _CONSTEXPR20 std::string replace_all(const std::string& string, const std::string& pattern, const std::string& newpat) {
         std::string str = string;
         const unsigned nsize = newpat.size();

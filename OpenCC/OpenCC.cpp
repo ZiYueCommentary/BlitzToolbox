@@ -15,7 +15,7 @@ BLITZ3D(SimpleConverter*) CreateOpenCC(BBStr configFileName) {
 }
 
 BLITZ3D(BBStr) OpenCConvert(SimpleConverter* converter, BBStr input) {
-	return getCharPtr(converter->Convert(input));
+	return BlitzToolbox::getCharPtr(converter->Convert(input));
 }
 
 BLITZ3D(void) FreeOpenCC(SimpleConverter* converter) {
