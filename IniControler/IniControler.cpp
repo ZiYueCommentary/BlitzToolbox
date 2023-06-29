@@ -95,7 +95,7 @@ BLITZ3D(BBStr) IniGetString(BBStr path, BBStr section, BBStr key, BBStr defaultV
 			if ((section1 == section) && (key == key1)) {
 				std::string value = line.substr(line.find('=') + 1);
 				if (value[0] == ' ') value = value.substr(1);
-				return getCharPtr(value);
+				return BlitzToolbox::getCharPtr(value);
 			}
 		}
 	}
@@ -351,9 +351,11 @@ void ExportJson(IniMap<std::string, IniMap<std::string, std::string>>&& sectionB
 	const char* indent = isMin ? "" : "    ";
 	const char* space = isMin ? "" : " ";
 	json << "{" << endl;
+	json << indent << "\"loading_screens\": [" << endl;
 	for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
-		json << indent << "\"" << BlitzToolbox::json_friendly_string(section->first) << "\":" << space << "{" << endl;
+		json << indent << indent << "{" << endl;
 		IniMap<std::string, std::string>& keyBuffer = sectionBuffer[section->first];
+		json << indent << indent << indent << "\"title\": \"" << BlitzToolbox::json_friendly_string(section->first) << "\"," << endl;
 		for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
 			std::string value = BlitzToolbox::json_friendly_string(keyBuffer[key->first]);
 			if (stringOnly) {
@@ -372,10 +374,11 @@ void ExportJson(IniMap<std::string, IniMap<std::string, std::string>>&& sectionB
 			else {
 				value = "\"" + value + "\"";
 			}
-			json << indent << indent << "\"" << BlitzToolbox::json_friendly_string(key->first) << "\":" << space << value << (key == --keyBuffer.end() ? "" : ",") << endl;
+			json << indent << indent << indent << "\"" << BlitzToolbox::json_friendly_string(key->first) << "\":" << space << value << (key == --keyBuffer.end() ? "" : ",") << endl;
 		}
-		json << indent << "}" << (section == --sectionBuffer.end() ? "" : ",") << endl;
+		json << indent << indent << "}" << (section == --sectionBuffer.end() ? "" : ",") << endl;
 	}
+	json << indent << "]" << endl;
 	json << "}";
 	json.close();
 }
