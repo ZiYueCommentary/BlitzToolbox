@@ -18,15 +18,15 @@ BLITZ3D(BBStr) ParseDomainTXT(BBStr txt, BBStr key) {
 	int n, a;
 	if ((n = s1.find(key)) != string::npos) result = s1.substr(n);
 	if ((a = result.find(';')) != string::npos) result = result.substr(s2.length() + 1, a - s2.length() - 1);
-	return getCharPtr(result);
+	return BlitzToolbox::getCharPtr(result);
 }
 
 BLITZ3D(BBStr) GetDomainTXT(BBStr domain) {
 	PDNS_RECORD pResult = NULL;
 	DnsQuery_A(domain, DNS_TYPE_TEXT, DNS_QUERY_BYPASS_CACHE, NULL, &pResult, NULL);
-	std::string record = pResult->Data.TXT.pStringArray[0];
+	std::string record = std::string(pResult->Data.TXT.pStringArray[0]);
 	DnsRecordListFree(pResult, DnsFreeRecordListDeep);
-	return getCharPtr(record);
+	return BlitzToolbox::getCharPtr(record);
 }
 
 BLITZ3D(bool) DownloadFile(BBStr url, BBStr file)

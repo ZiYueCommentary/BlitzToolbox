@@ -10,12 +10,14 @@
 ///////////////////////////
 
 #define DOCUMENT_IDENT "_RapidBson@DocObj"
+#define SAFE_NULL(value, type) (value)->Is##type() ? (value)->Get##type() : NULL
+#define PURE_NULL(value) (value)->IsNull() ? NULL : (value)
 
-#include <Windows.h>
 #include "rapidjson/document.h"
 #include "rapidjson/prettywriter.h"
 #include <fstream>
 #include <string>
+#include <Windows.h>
 #include "../BlitzToolbox.hpp"
 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
@@ -29,12 +31,6 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 using namespace rapidjson;
 using Array = GenericValue<UTF8<>>::Array;
 typedef void* Object;
-
-template<typename T>
-inline T* PureNull(T* t) {
-    if (t->IsNull()) return nullptr;
-    else return t;
-}
 
 struct DocumentObj {
     BBStr identifier = DOCUMENT_IDENT;
@@ -64,23 +60,23 @@ BLITZ3D(DocumentObj*) JsonParseFromFile(BBStr path) {
     }
     DocumentObj* obj = new DocumentObj();
     obj->document.Parse<kParseCommentsFlag>(json.c_str());
-    return PureNull(obj);
+    return PURE_NULL(obj);
 }
 
 BLITZ3D(DocumentObj*) JsonParseFromString(BBStr json) {
     DocumentObj* obj = new DocumentObj();
     obj->document.Parse<kParseCommentsFlag>(json);
-    return PureNull(obj);
+    return PURE_NULL(obj);
 }
 
 BLITZ3D(Value*) JsonGetValue(Object obj, BBStr name) {
     DocumentObj* doc = reinterpret_cast<DocumentObj*>(obj);
     if (doc->identifier == DOCUMENT_IDENT) { // obj is a document
-        return PureNull(&doc->document[name]);
+        return PURE_NULL(&doc->document[name]);
     }
     else { // obj is a value
         Value* val = reinterpret_cast<Value*>(obj);
-        return PureNull(&(*val)[name]);
+        return PURE_NULL(&(*val)[name]);
     }
 }
 
@@ -121,23 +117,23 @@ BLITZ3D(int) JsonIsNull(Object obj) {
 }
 
 BLITZ3D(BBStr) JsonGetString(Value* value) {
-    return value->GetString();
+    return SAFE_NULL(value, String);
 }
 
 BLITZ3D(int) JsonGetInt(Value* value) {
-    return value->GetInt();
+    return SAFE_NULL(value, Int);
 }
 
 BLITZ3D(float) JsonGetFloat(Value* value) {
-    return value->GetFloat();
+    return SAFE_NULL(value, Float);
 }
 
 BLITZ3D(int) JsonGetBoolean(Value* value) {
-    return value->GetBool();
+    return SAFE_NULL(value, Bool);
 }
 
 BLITZ3D(Array*) JsonGetArray(Value* value) {
-    return new Array(value->GetArray());
+    return value->IsArray() ? new Array(value->GetArray()) : nullptr;
 }
 
 BLITZ3D(int) JsonGetArraySize(Array* array) {
@@ -145,7 +141,7 @@ BLITZ3D(int) JsonGetArraySize(Array* array) {
 }
 
 BLITZ3D(Value*) JsonGetArrayValue(Array* array, int index) {
-    return PureNull(&(*array)[index]);
+    return PURE_NULL(&(*array)[index]);
 }
 
 BLITZ3D(int) JsonGetArrayCapacity(Array* array) {
