@@ -10,8 +10,7 @@
 ///////////////////////////
 
 #define DOCUMENT_IDENT "_RapidBson@DocObj"
-#define SAFE_NULL(value, type) (value)->Is##type() ? (value)->Get##type() : NULL
-#define PURE_NULL(value) (value)->IsNull() ? NULL : (value)
+#define SAFE_TYPE(value, type) (value)->Is##type() ? (value)->Get##type() : NULL
 
 #include "rapidjson/document.h"
 #include "rapidjson/prettywriter.h"
@@ -60,23 +59,23 @@ BLITZ3D(DocumentObj*) JsonParseFromFile(BBStr path) {
     }
     DocumentObj* obj = new DocumentObj();
     obj->document.Parse<kParseCommentsFlag>(json.c_str());
-    return PURE_NULL(obj);
+    return obj;
 }
 
 BLITZ3D(DocumentObj*) JsonParseFromString(BBStr json) {
     DocumentObj* obj = new DocumentObj();
     obj->document.Parse<kParseCommentsFlag>(json);
-    return PURE_NULL(obj);
+    return obj;
 }
 
 BLITZ3D(Value*) JsonGetValue(Object obj, BBStr name) {
     DocumentObj* doc = reinterpret_cast<DocumentObj*>(obj);
     if (doc->identifier == DOCUMENT_IDENT) { // obj is a document
-        return PURE_NULL(&doc->document[name]);
+        return &doc->document[name];
     }
     else { // obj is a value
         Value* val = reinterpret_cast<Value*>(obj);
-        return PURE_NULL(&(*val)[name]);
+        return &(*val)[name];
     }
 }
 
@@ -117,19 +116,19 @@ BLITZ3D(int) JsonIsNull(Object obj) {
 }
 
 BLITZ3D(BBStr) JsonGetString(Value* value) {
-    return SAFE_NULL(value, String);
+    return SAFE_TYPE(value, String);
 }
 
 BLITZ3D(int) JsonGetInt(Value* value) {
-    return SAFE_NULL(value, Int);
+    return SAFE_TYPE(value, Int);
 }
 
 BLITZ3D(float) JsonGetFloat(Value* value) {
-    return SAFE_NULL(value, Float);
+    return SAFE_TYPE(value, Float);
 }
 
 BLITZ3D(int) JsonGetBoolean(Value* value) {
-    return SAFE_NULL(value, Bool);
+    return SAFE_TYPE(value, Bool);
 }
 
 BLITZ3D(Array*) JsonGetArray(Value* value) {
@@ -141,7 +140,7 @@ BLITZ3D(int) JsonGetArraySize(Array* array) {
 }
 
 BLITZ3D(Value*) JsonGetArrayValue(Array* array, int index) {
-    return PURE_NULL(&(*array)[index]);
+    return &(*array)[index];
 }
 
 BLITZ3D(int) JsonGetArrayCapacity(Array* array) {
