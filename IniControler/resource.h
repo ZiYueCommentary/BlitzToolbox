@@ -4,7 +4,7 @@
 
 //#define UNORDERED_MAP
 
-// пб╤тоС╣добр╩вИд╛хож╣
+// Ф√╟Е╞╧Х╠║Г └Д╦▀Д╦─Г╩└И╩≤Х╝╓Е─╪
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS

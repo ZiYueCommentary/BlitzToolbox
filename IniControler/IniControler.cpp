@@ -2,14 +2,13 @@
 * IniControler - A part of BlitzToolbox
 * Write & Read ini file.
 *
-* v1.06 2022.11.12
+* v1.07 2023.7.14
 */
 
 #include "resource.h"
 #include "../BlitzToolbox.hpp"
 #include <fstream>
-#include <windows.h>
-#include <filesystem>
+#include <Windows.h>
 
 #ifdef UNORDERED_MAP // see "resource.h"
 #include <unordered_map>
@@ -21,21 +20,10 @@ template <typename T, typename V>
 using IniMap = std::map<T, V>;
 #endif
 
-// We can't use const char* to get things from buffer (maybe because string's pointer is different?)
-// so we must use std::string to get things from buffer
-/*
-* Buffer for ini files.
-*/
 static IniMap<std::string, IniMap<std::string, IniMap<std::string, std::string>>> IniBuffer;
 
-/*
-* Write buffer for ini file.
-*
-* @param path          Path of ini file.
-* @param clearPervious Clear old content of buffer.
-*/
 BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPrevious) {
-	if (clearPrevious) IniBuffer[path].clear();
+	if (clearPrevious) IniBuffer[BlitzToolbox::normalize_path(std::string(path))].clear();
 	IniMap<std::string, IniMap<std::string, std::string>> buffer;
 	std::ifstream file(path);
 	if (!file.is_open()) return;
@@ -57,26 +45,15 @@ BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPrevious) {
 		}
 	}
 	file.close();
-	IniBuffer[path] = buffer;
+	IniBuffer[BlitzToolbox::normalize_path(std::string(path))] = buffer;
 }
 
 /* Read INI */
 
-/*
-* Get value from ini file.
-*
-* @param path           Path of ini file.
-* @param section        Section of key.
-* @param key            Key of value.
-* @param defaultValue   Value that if can't find value from ini file.
-* @param allowBuffer    Allow IniControler get value from IniBuffer
-*
-* @return Value of key, or default value.
-*/
 BLITZ3D(BBStr) IniGetString(BBStr path, BBStr section, BBStr key, BBStr defaultValue, bool allowBuffer) {
 	if (allowBuffer) {
-		if (IniBuffer[path][section].contains(key)) { // in java it will throw exception when get null
-			return IniBuffer[path][section][key].c_str(); // but in c++ it wont throw
+		if (IniBuffer[BlitzToolbox::normalize_path(std::string(path))][section].contains(key)) { // in java it will throw exception when get null
+			return IniBuffer[BlitzToolbox::normalize_path(std::string(path))][section][key].c_str(); // but in c++ it wont throw
 		}
 	}
 
@@ -113,7 +90,7 @@ BLITZ3D(float) IniGetFloat(BBStr path, BBStr section, BBStr key, float defaultVa
 
 BLITZ3D(bool) IniSectionExist(BBStr path, BBStr section, bool allowBuffer) {
 	if (allowBuffer) {
-		bool contain = IniBuffer[path].contains(section);
+		bool contain = IniBuffer[BlitzToolbox::normalize_path(std::string(path))].contains(section);
 		if (contain) return contain;
 	}
 
@@ -131,12 +108,12 @@ BLITZ3D(bool) IniSectionExist(BBStr path, BBStr section, bool allowBuffer) {
 }
 
 BLITZ3D(bool) IniBufferSectionExist(BBStr path, BBStr section) {
-	return IniBuffer[path].contains(section);
+	return IniBuffer[BlitzToolbox::normalize_path(std::string(path))].contains(section);
 }
 
 BLITZ3D(bool) IniKeyExist(BBStr path, BBStr section, BBStr key, bool allowBuffer) {
 	if (allowBuffer) {
-		bool contain = IniBuffer[path][section].contains(key);
+		bool contain = IniBuffer[BlitzToolbox::normalize_path(std::string(path))][section].contains(key);
 		if (contain) return contain;
 	}
 
@@ -160,7 +137,7 @@ BLITZ3D(bool) IniKeyExist(BBStr path, BBStr section, BBStr key, bool allowBuffer
 }
 
 BLITZ3D(bool) IniBufferKeyExist(BBStr path, BBStr section, BBStr key) {
-	return IniBuffer[path][section].contains(key);
+	return IniBuffer[BlitzToolbox::normalize_path(std::string(path))][section].contains(key);
 }
 
 /*
@@ -174,8 +151,8 @@ BLITZ3D(bool) IniBufferKeyExist(BBStr path, BBStr section, BBStr key) {
 * @return Value of key, or default value.
 */
 BLITZ3D(BBStr) IniGetBufferString(BBStr path, BBStr section, BBStr key, BBStr defaultValue) {
-	if (IniBuffer[path][section].contains(key))
-		return IniBuffer[path][section][key].c_str();
+	if (IniBuffer[BlitzToolbox::normalize_path(std::string(path))][section].contains(key))
+		return IniBuffer[BlitzToolbox::normalize_path(std::string(path))][section][key].c_str();
 	else
 		return defaultValue;
 }
@@ -190,19 +167,10 @@ BLITZ3D(float) IniGetBufferFloat(BBStr path, BBStr section, BBStr key, float def
 
 /* Write INI */
 
-/*
-* Write something into ini file.
-*
-* @param path           Path of ini file.
-* @param section        Section of key.
-* @param key            Key of value.
-* @param value          Value of key.
-* @param updateBuffer   Update value of buffer.
-*/
 BLITZ3D(void) IniWriteString(BBStr path, BBStr section, BBStr key, BBStr value, bool updateBuffer) {
 	// maybe i will write one by my self but im too lazy lol
 	WritePrivateProfileStringA(section, key, value, std::filesystem::absolute(path).generic_string().c_str());
-	if (updateBuffer) IniBuffer[path][section][key] = value;
+	if (updateBuffer) IniBuffer[BlitzToolbox::normalize_path(std::string(path))][section][key] = value;
 }
 
 BLITZ3D(void) IniWriteInt(BBStr path, BBStr section, BBStr key, int value, bool updateBuffer) {
@@ -215,7 +183,7 @@ BLITZ3D(void) IniWriteFloat(BBStr path, BBStr section, BBStr key, float value, b
 
 BLITZ3D(void) IniRemoveKey(BBStr path, BBStr section, BBStr key, bool updateBuffer) {
 	WritePrivateProfileStringA(section, key, NULL, std::filesystem::absolute(path).generic_string().c_str());
-	if (updateBuffer) IniBuffer[path][section].erase(key);
+	if (updateBuffer) IniBuffer[BlitzToolbox::normalize_path(std::string(path))][section].erase(key);
 }
 
 BLITZ3D(void) IniCreateSection(BBStr path, BBStr section) {
@@ -224,47 +192,31 @@ BLITZ3D(void) IniCreateSection(BBStr path, BBStr section) {
 
 BLITZ3D(void) IniRemoveSection(BBStr path, BBStr section, bool updateBuffer) {
 	WritePrivateProfileSectionA(section, NULL, std::filesystem::absolute(path).generic_string().c_str());
-	if (updateBuffer) IniBuffer[path].erase(section);
+	if (updateBuffer) IniBuffer[BlitzToolbox::normalize_path(std::string(path))].erase(section);
 }
 
 BLITZ3D(void) IniRemoveBufferKey(BBStr path, BBStr section, BBStr key) {
-	IniBuffer[path][section].erase(key);
+	IniBuffer[BlitzToolbox::normalize_path(std::string(path))][section].erase(key);
 }
 
 BLITZ3D(void) IniRemoveBufferSection(BBStr path, BBStr section) {
-	IniBuffer[path].erase(section);
+	IniBuffer[BlitzToolbox::normalize_path(std::string(path))].erase(section);
 }
 
 /* BUFFER */
 
-/*
-* Clear buffer of path.
-*
-* @param path name of buffer.
-*/
 BLITZ3D(void) IniClearBuffer(BBStr path) {
-	IniBuffer[path].clear();
+	IniBuffer[BlitzToolbox::normalize_path(std::string(path))].clear();
 }
 
-/*
-* Clear all buffer.
-*/
 BLITZ3D(void) IniClearAllBuffer() {
 	IniBuffer.clear();
 }
 
 /* DANGER ZONE */
 
-/*
-* Set buffer's value.
-*
-* @param path           Path of ini file.
-* @param section        Section of key.
-* @param key            Key of value.
-* @param value          Value of key.
-*/
 BLITZ3D(void) IniSetBufferValue(BBStr path, BBStr section, BBStr key, BBStr value) {
-	IniBuffer[path][section][key] = value;
+	IniBuffer[BlitzToolbox::normalize_path(std::string(path))][section][key] = value;
 }
 
 BLITZ3D(void) IniSetExportBufferValue(IniMap<std::string, IniMap<std::string, std::string>>* buffer, BBStr section, BBStr key, BBStr value) {
@@ -272,7 +224,7 @@ BLITZ3D(void) IniSetExportBufferValue(IniMap<std::string, IniMap<std::string, st
 }
 
 extern "C" __declspec(dllexport) IniMap<std::string, IniMap<std::string, std::string>>*_stdcall IniGetBuffer(BBStr path) {
-	return &IniBuffer[path];
+	return &IniBuffer[BlitzToolbox::normalize_path(std::string(path))];
 }
 
 extern "C" __declspec(dllexport) IniMap<std::string, IniMap<std::string, IniMap<std::string, std::string>>>*_stdcall IniGetAllBuffer() {
@@ -280,7 +232,7 @@ extern "C" __declspec(dllexport) IniMap<std::string, IniMap<std::string, IniMap<
 }
 
 BLITZ3D(void) IniSetBuffer(BBStr path, IniMap<std::string, IniMap<std::string, std::string>>* buffer) {
-	IniBuffer[path] = *buffer;
+	IniBuffer[BlitzToolbox::normalize_path(std::string(path))] = *buffer;
 }
 
 BLITZ3D(void) IniSetAllBuffer(IniMap<std::string, IniMap<std::string, IniMap<std::string, std::string>>>* buffer) {
@@ -292,7 +244,7 @@ BLITZ3D(void) IniSetAllBuffer(IniMap<std::string, IniMap<std::string, IniMap<std
 IniMap<std::string, IniMap<std::string, std::string>>* GetIniMap(BBStr path, bool allowBuffer) {
 	IniMap<std::string, IniMap<std::string, std::string>>* buffer;
 	if (allowBuffer && IniBuffer.contains(path)) {
-		buffer = &IniBuffer[path];
+		buffer = &IniBuffer[BlitzToolbox::normalize_path(std::string(path))];
 	}
 	else {
 		buffer = new IniMap<std::string, IniMap<std::string, std::string>>();
@@ -340,7 +292,7 @@ BLITZ3D(void) IniExportIni(BBStr path, BBStr ini, bool isMin, bool allowBuffer) 
 }
 
 BLITZ3D(void) IniBufferExportIni(BBStr path, BBStr ini, bool isMin) {
-	ExportIni(std::move(IniBuffer[path]), ini, isMin);
+	ExportIni(std::move(IniBuffer[BlitzToolbox::normalize_path(std::string(path))]), ini, isMin);
 }
 
 /* JSON */
@@ -351,11 +303,9 @@ void ExportJson(IniMap<std::string, IniMap<std::string, std::string>>&& sectionB
 	const char* indent = isMin ? "" : "    ";
 	const char* space = isMin ? "" : " ";
 	json << "{" << endl;
-	json << indent << "\"loading_screens\": [" << endl;
 	for (auto section = sectionBuffer.begin(); section != sectionBuffer.end(); section++) {
-		json << indent << indent << "{" << endl;
+		json << indent << "\"" << BlitzToolbox::json_friendly_string(section->first) << "\":" << space << "{" << endl;
 		IniMap<std::string, std::string>& keyBuffer = sectionBuffer[section->first];
-		json << indent << indent << indent << "\"title\": \"" << BlitzToolbox::json_friendly_string(section->first) << "\"," << endl;
 		for (auto key = keyBuffer.begin(); key != keyBuffer.end(); key++) {
 			std::string value = BlitzToolbox::json_friendly_string(keyBuffer[key->first]);
 			if (stringOnly) {
@@ -374,11 +324,10 @@ void ExportJson(IniMap<std::string, IniMap<std::string, std::string>>&& sectionB
 			else {
 				value = "\"" + value + "\"";
 			}
-			json << indent << indent << indent << "\"" << BlitzToolbox::json_friendly_string(key->first) << "\":" << space << value << (key == --keyBuffer.end() ? "" : ",") << endl;
+			json << indent << indent << "\"" << BlitzToolbox::json_friendly_string(key->first) << "\":" << space << value << (key == --keyBuffer.end() ? "" : ",") << endl;
 		}
-		json << indent << indent << "}" << (section == --sectionBuffer.end() ? "" : ",") << endl;
+		json << indent << "}" << (section == --sectionBuffer.end() ? "" : ",") << endl;
 	}
-	json << indent << "]" << endl;
 	json << "}";
 	json.close();
 }
@@ -388,7 +337,7 @@ BLITZ3D(void) IniExportJson(BBStr path, BBStr json, bool isMin, bool stringOnly,
 }
 
 BLITZ3D(void) IniBufferExportJson(BBStr path, BBStr json, bool isMin, bool stringOnly) {
-	ExportJson(std::move(IniBuffer[path]), json, isMin, stringOnly);
+	ExportJson(std::move(IniBuffer[BlitzToolbox::normalize_path(std::string(path))]), json, isMin, stringOnly);
 }
 
 /* HTML */
@@ -454,7 +403,7 @@ BLITZ3D(void) IniExportHtml(BBStr path, BBStr html, bool isMin, bool isList, boo
 }
 
 BLITZ3D(void) IniBufferExportHtml(BBStr path, BBStr html, bool isMin, bool isList) {
-	ExportHtml(std::move(IniBuffer[path]), path, html, isMin, isList);
+	ExportHtml(std::move(IniBuffer[BlitzToolbox::normalize_path(std::string(path))]), path, html, isMin, isList);
 }
 
 /* XML */
@@ -494,5 +443,5 @@ BLITZ3D(void) IniExportXml(BBStr path, BBStr xml, bool isMin, bool allowBuffer) 
 }
 
 BLITZ3D(void) IniBufferExportXml(BBStr path, BBStr xml, bool isMin) {
-	ExportXml(std::move(IniBuffer[path]), path, xml, isMin);
+	ExportXml(std::move(IniBuffer[BlitzToolbox::normalize_path(std::string(path))]), path, xml, isMin);
 }

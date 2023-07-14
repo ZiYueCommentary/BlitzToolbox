@@ -73,7 +73,7 @@ BEGIN
         #else
             VALUE "FileDescription", "Write & Read ini file for Blitz3D."
         #endif
-            VALUE "FileVersion", "1.0.6.0"
+            VALUE "FileVersion", "1.0.7.0"
             VALUE "InternalName", "IniControler.dll"
             VALUE "LegalCopyright", "Copyright (C) 2022 ZiYueCommentary"
             VALUE "OriginalFilename", "IniControler.dll"
