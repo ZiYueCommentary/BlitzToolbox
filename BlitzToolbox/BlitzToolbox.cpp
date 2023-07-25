@@ -24,3 +24,30 @@ BLITZ3D(BBStr) FindSCP294Drink(BBStr file, BBStr drink) {
 	}
 	return "Null"; // nothing found ¯\_(ツ)_/¯
 }
+
+BLITZ3D(BBStr) FindNextDirectory(BBStr path, BBStr directory) {
+    WIN32_FIND_DATAA fdFindData;
+    HANDLE hFind;
+    std::string filename = path;
+    filename += "\\*.*";
+    int count = 0;
+    BOOL done;
+    BOOL nextfolder = !std::filesystem::exists(std::filesystem::path(std::string(path) + "\\"s + directory));
+    hFind = FindFirstFileA(filename.c_str(), &fdFindData);
+    done = hFind != INVALID_HANDLE_VALUE;
+    while (done)
+    {
+        if (strcmp(fdFindData.cFileName, ".") && strcmp(fdFindData.cFileName, ".."))
+        {
+            filename = path;
+            filename += "\\"s + fdFindData.cFileName;
+            if ((fdFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) {
+                if (nextfolder) return getCharPtr(BlitzToolbox::replace_all(filename, std::string(path) + "\\", ""));
+                if (filename == std::string(path) + "\\"s + directory) nextfolder = TRUE;
+            }
+        }
+        done = FindNextFileA(hFind, &fdFindData);
+    }
+    FindClose(hFind);
+    return "en";
+}
