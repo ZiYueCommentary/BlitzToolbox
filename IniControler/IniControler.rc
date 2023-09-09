@@ -51,13 +51,13 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,6,0
+ FILEVERSION 1,0,6,1
  PRODUCTVERSION 1,0,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
- FILEFLAGS 0x1L
+ FILEFLAGS 0x9L
 #else
- FILEFLAGS 0x0L
+ FILEFLAGS 0x8L
 #endif
  FILEOS 0x40004L
  FILETYPE 0x2L
@@ -68,10 +68,10 @@ BEGIN
         BLOCK "000004b0"
         BEGIN
             VALUE "CompanyName", "BlitzToolbox"
-            VALUE "FileDescription", "Write & Read ini file for Blitz3D."
-            VALUE "FileVersion", "1.0.6.0"
+            VALUE "FileDescription", "Write & Read ini file for Blitz3D. Custom unordered map edition for scpcb-ue."
+            VALUE "FileVersion", "1.0.6.1"
             VALUE "InternalName", "IniControler.dll"
-            VALUE "LegalCopyright", "Copyright (C) 2022 ZiYueCommentary"
+            VALUE "LegalCopyright", "Copyright (C) 2023 Ultimate Edition Team"
             VALUE "OriginalFilename", "IniControler.dll"
             VALUE "ProductName", "IniControler"
             VALUE "ProductVersion", "1.0.1.0"

@@ -1,8 +1,9 @@
 /*
 * IniControler - A part of BlitzToolbox
-* Write & Read ini file.
+* Write & Read ini file. Custom branch for scpcb-ue.
 *
 * v1.06 2022.11.12
+* v1.061 2023.9.9
 */
 
 #include "resource.h"
@@ -10,6 +11,8 @@
 #include <fstream>
 #include <windows.h>
 #include <filesystem>
+
+#define UNORDERED_MAP // quicker!
 
 #ifdef UNORDERED_MAP // see "resource.h"
 #include <unordered_map>
@@ -494,4 +497,26 @@ BLITZ3D(void) IniExportXml(BBStr path, BBStr xml, bool isMin, bool allowBuffer) 
 
 BLITZ3D(void) IniBufferExportXml(BBStr path, BBStr xml, bool isMin) {
     ExportXml(std::move(IniBuffer[path]), path, xml, isMin);
+}
+
+inline string MakeLower(string str) {
+    // in scpcb-ue, input of scp294 are always pure english
+    string ret = "";
+    for (char c : str) {
+        ret += char(tolower(c));
+    }
+    return ret;
+}
+
+BLITZ3D(BBStr) FindSCP294Drink(BBStr file, BBStr drink) {
+    auto& buffer = IniBuffer[file];
+    for (auto section = buffer.begin(); section != buffer.end(); section++) {
+        vector<string> vec = BlitzToolbox::split_string(section->first, "|");
+        for (string drink1 : vec) {
+            if (MakeLower(drink1) == MakeLower(drink)) {
+                return getCharPtr(section->first + ","s + drink1);
+            }
+        }
+    }
+    return "Null"; // nothing found ¯\_(ツ)_/¯
 }
