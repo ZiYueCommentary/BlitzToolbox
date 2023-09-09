@@ -39,20 +39,21 @@ BLITZ3D(BBStr) FindNextDirectory(BBStr path, BBStr directory, BBStr def) {
 }
 
 BLITZ3D(void) DownloadFileThread(BBStr url, BBStr file) {
-    std::thread([url, file]() {
+    BBStr cUrl = getCharPtr(url), cFile = getCharPtr(file);
+    std::thread([cUrl, cFile]() {
         byte Temp[1024];
         ULONG Number = 1;
 
         FILE* stream;
-        HINTERNET hSession = InternetOpenW(L"RookIE/1.0", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
+        HINTERNET hSession = InternetOpen("RookIE/1.0", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
         if (hSession != NULL)
         {
-            HINTERNET handle2 = InternetOpenUrlW(hSession, (LPCWSTR)url, NULL, 0, INTERNET_FLAG_DONT_CACHE, 0);
+            HINTERNET handle2 = InternetOpenUrl(hSession, cUrl, NULL, 0, INTERNET_FLAG_DONT_CACHE, 0);
             if (handle2 != NULL)
             {
                 while (Number > 0)
                 {
-                    fopen_s(&stream, file, "ab+");
+                    fopen_s(&stream, cFile, "ab+");
                     InternetReadFile(handle2, Temp, 1024 - 1, &Number);
                     fwrite(Temp, sizeof(char), Number, stream);
                     fclose(stream);
@@ -63,19 +64,5 @@ BLITZ3D(void) DownloadFileThread(BBStr url, BBStr file) {
             InternetCloseHandle(hSession);
             hSession = NULL;
         }
-        }).join();
-}
-
-BLITZ3D(BBStr) SimpleFileSize(int size) {
-    if (size >= 1048576) { // >=1MB
-        if (size >= 1073741824) { // >= 1GB
-            return getCharPtr(std::format("{:.2f}GB", size >> 30));
-        }
-        else {
-            return getCharPtr(std::format("{:.2f}MB", size >> 20));
-        }
-    }
-    else {
-        return getCharPtr(std::format("{:.2f}KB", size >> 10));
-    }
+        }).detach();
 }
