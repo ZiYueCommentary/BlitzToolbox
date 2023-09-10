@@ -1,8 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by IniControler.rc
-
-//#define UNORDERED_MAP
+// Used by RapidBson.rc
 
 // 新对象的下一组默认值
 // 

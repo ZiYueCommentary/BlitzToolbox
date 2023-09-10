@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 中文(简体，中国) resources
+// 涓枃(绠�浣擄紝涓浗) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
@@ -69,7 +69,7 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "BlitzToolbox"
             VALUE "FileDescription", "Write & Read ini file for Blitz3D. Custom unordered map edition for scpcb-ue."
-            VALUE "FileVersion", "1.0.6.1"
+            VALUE "FileVersion", "1.0.7.1"
             VALUE "InternalName", "IniControler.dll"
             VALUE "LegalCopyright", "Copyright (C) 2023 Ultimate Edition Team"
             VALUE "OriginalFilename", "IniControler.dll"
@@ -83,7 +83,7 @@ BEGIN
     END
 END
 
-#endif    // 中文(简体，中国) resources
+#endif    // 涓枃(绠�浣擄紝涓浗) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

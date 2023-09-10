@@ -2,56 +2,31 @@
 * NetworkConnector - A part of BlitzToolbox
 * Parse domain's TXT and download files.
 *
-* v1.02 2022.11.19
+* v1.02 2022.12.1
 */
 
 #include "../BlitzToolbox.hpp"
 #include <Windows.h>
 #include <wininet.h>
+#include <WinDNS.h>
 #include <filesystem>
 
 using std::string;
-
-inline string exec(const std::string& cmd) {
-	FILE* pipe = _popen(cmd.c_str(), "r");
-	if (!pipe) return "";
-	char buffer[128];
-	string result = "";
-	while (!feof(pipe)) {
-		if (fgets(buffer, 128, pipe) != NULL) result = buffer;
-	}
-	_pclose(pipe);
-	return result;
-}
-
-inline string clearTabLeft(string src) {
-	unsigned int pos = 0;
-	string result = src;
-	for (;;) {
-		if (src[pos] == '	') {
-			result = src.substr(pos + 1);
-			pos++;
-		}
-		else break;
-	}
-	return result;
-}
 
 BLITZ3D(BBStr) ParseDomainTXT(BBStr txt, BBStr key) {
 	string s1 = txt, s2 = key, result;
 	int n, a;
 	if ((n = s1.find(key)) != string::npos) result = s1.substr(n);
 	if ((a = result.find(';')) != string::npos) result = result.substr(s2.length() + 1, a - s2.length() - 1);
-	return getCharPtr(result);
+	return BlitzToolbox::getCharPtr(result);
 }
 
 BLITZ3D(BBStr) GetDomainTXT(BBStr domain) {
-	using namespace std;
-	string result = clearTabLeft(exec("nslookup -qt=TXT {0}"s + domain));
-	if (result[0] == '\"') result = result.substr(1);
-	if (result[result.length() - 2] == '\"') result = result.substr(0, result.length() - 2);
-	if (result[result.length() - 1] != ';') result += ';';
-	return getCharPtr(result);
+	PDNS_RECORD pResult = NULL;
+	DnsQuery_A(domain, DNS_TYPE_TEXT, DNS_QUERY_BYPASS_CACHE, NULL, &pResult, NULL);
+	std::string record = std::string(pResult->Data.TXT.pStringArray[0]);
+	DnsRecordListFree(pResult, DnsFreeRecordListDeep);
+	return BlitzToolbox::getCharPtr(record);
 }
 
 BLITZ3D(bool) DownloadFile(BBStr url, BBStr file)
@@ -61,10 +36,10 @@ BLITZ3D(bool) DownloadFile(BBStr url, BBStr file)
 	ULONG Number = 1;
 
 	FILE* stream;
-	HINTERNET hSession = InternetOpen(L"RookIE/1.0", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
+	HINTERNET hSession = InternetOpen("RookIE/1.0", INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
 	if (hSession != NULL)
 	{
-		HINTERNET handle2 = InternetOpenUrl(hSession, (LPCWSTR)url, NULL, 0, INTERNET_FLAG_DONT_CACHE, 0);
+		HINTERNET handle2 = InternetOpenUrl(hSession, url, NULL, 0, INTERNET_FLAG_DONT_CACHE, 0);
 		if (handle2 != NULL)
 		{
 			if ((stream = fopen(file, "wb")) != NULL)

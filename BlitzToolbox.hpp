@@ -5,18 +5,19 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <filesystem>
 
 #define BLITZ3D(x) extern "C" __declspec(dllexport) x _stdcall
 typedef const char* BBStr;
 
-_NODISCARD inline BBStr getCharPtr(const std::string& str) {
-    char* cha = new char[str.size() + 1];
-    memcpy(cha, str.c_str(), str.size() + 1);
-    const char* p = cha;
-    return p;
-}
-
 namespace BlitzToolbox {
+    _NODISCARD inline BBStr getCharPtr(const std::string& str) {
+        char* cha = new char[str.size() + 1];
+        memcpy(cha, str.c_str(), str.size() + 1);
+        const char* p = cha;
+        return p;
+    }
+    
     _NODISCARD _CONSTEXPR20 std::string replace_all(const std::string& string, const std::string& pattern, const std::string& newpat) {
         std::string str = string;
         const unsigned nsize = newpat.size();
@@ -64,5 +65,18 @@ namespace BlitzToolbox {
         }
         vector.push_back(string);
         return vector;
+    }
+
+    _NODISCARD _CONSTEXPR20 std::string to_lower_string(const std::string& str) {
+        std::string result = str;
+        for (int i = 0; i < result.length(); i++) {
+            result[i] = tolower(result[i]);
+        }
+        return result;
+    }
+
+    _NODISCARD _CONSTEXPR20 std::string normalize_path(const std::filesystem::path& path) {
+        // Windows is not case sensitive
+        return to_lower_string(std::filesystem::absolute(path).lexically_normal().generic_string());
     }
 }

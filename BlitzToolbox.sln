@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Blib", "Blib\Blib.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlitzToolbox", "BlitzToolbox\BlitzToolbox.vcxproj", "{1772548F-5441-40D1-B6DA-ECD113531A9B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RapidBson", "RapidBson\RapidBson.vcxproj", "{550DA99B-BB5F-49A5-8489-8497F78C6298}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -81,6 +83,14 @@ Global
 		{1772548F-5441-40D1-B6DA-ECD113531A9B}.Release|x64.Build.0 = Release|x64
 		{1772548F-5441-40D1-B6DA-ECD113531A9B}.Release|x86.ActiveCfg = Release|Win32
 		{1772548F-5441-40D1-B6DA-ECD113531A9B}.Release|x86.Build.0 = Release|Win32
+		{550DA99B-BB5F-49A5-8489-8497F78C6298}.Debug|x64.ActiveCfg = Debug|x64
+		{550DA99B-BB5F-49A5-8489-8497F78C6298}.Debug|x64.Build.0 = Debug|x64
+		{550DA99B-BB5F-49A5-8489-8497F78C6298}.Debug|x86.ActiveCfg = Debug|Win32
+		{550DA99B-BB5F-49A5-8489-8497F78C6298}.Debug|x86.Build.0 = Debug|Win32
+		{550DA99B-BB5F-49A5-8489-8497F78C6298}.Release|x64.ActiveCfg = Release|x64
+		{550DA99B-BB5F-49A5-8489-8497F78C6298}.Release|x64.Build.0 = Release|x64
+		{550DA99B-BB5F-49A5-8489-8497F78C6298}.Release|x86.ActiveCfg = Release|Win32
+		{550DA99B-BB5F-49A5-8489-8497F78C6298}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
