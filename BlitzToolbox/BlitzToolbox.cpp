@@ -2,7 +2,7 @@
 * BlitzToolbox - A part of BlitzToolbox
 * Custom library for scpcb-ue.
 *
-* v1.0 2023.9.9
+* v1.0 2023.9.10
 */
 
 #include "../BlitzToolbox.hpp"
@@ -11,25 +11,24 @@
 #include <wininet.h>
 
 BLITZ3D(BBStr) FindNextDirectory(BBStr path, BBStr directory, BBStr def) {
+    using namespace std;
+
     WIN32_FIND_DATAA fdFindData;
     HANDLE hFind;
-    std::string filename = path;
-    filename += "\\*.*";
+    std::string filename = path + "\\*.*"s;
     int count = 0;
     BOOL done;
-    BOOL nextfolder = !std::filesystem::exists(std::filesystem::path(std::string(path) + "\\" + directory));
+    BOOL nextfolder = !std::filesystem::exists(std::filesystem::path(path + "\\"s + directory));
     hFind = FindFirstFileA(filename.c_str(), &fdFindData);
     done = hFind != INVALID_HANDLE_VALUE;
     while (done)
     {
         if (strcmp(fdFindData.cFileName, ".") && strcmp(fdFindData.cFileName, ".."))
         {
-            filename = path;
-            filename += "\\";
-            filename += fdFindData.cFileName;
+            filename = path + "\\"s + fdFindData.cFileName;
             if ((fdFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY) {
-                if (nextfolder) return getCharPtr(BlitzToolbox::replace_all(filename, std::string(path) + "\\", ""));
-                if (filename == std::string(path) + "\\" + directory) nextfolder = TRUE;
+                if (nextfolder) return BlitzToolbox::getCharPtr(BlitzToolbox::replace_all(filename, path + "\\"s, ""));
+                if (filename == (path + "\\"s + directory)) nextfolder = TRUE;
             }
         }
         done = FindNextFileA(hFind, &fdFindData);
@@ -39,8 +38,11 @@ BLITZ3D(BBStr) FindNextDirectory(BBStr path, BBStr directory, BBStr def) {
 }
 
 BLITZ3D(void) DownloadFileThread(BBStr url, BBStr file) {
-    BBStr cUrl = getCharPtr(url), cFile = getCharPtr(file);
+    BBStr cUrl = BlitzToolbox::getCharPtr(url);
+    BBStr cFile = BlitzToolbox::getCharPtr(file);
     std::thread([cUrl, cFile]() {
+        DeleteFile(std::filesystem::absolute(cFile).generic_string().c_str());
+
         byte Temp[1024];
         ULONG Number = 1;
 
