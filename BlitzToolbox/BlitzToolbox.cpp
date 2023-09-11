@@ -2,13 +2,14 @@
 * BlitzToolbox - A part of BlitzToolbox
 * Custom library for scpcb-ue.
 *
-* v1.0 2023.9.10
+* v1.0 2023.9.12
 */
 
 #include "../BlitzToolbox.hpp"
 #include <Windows.h>
 #include <filesystem>
 #include <wininet.h>
+#include <unordered_map>
 
 BLITZ3D(BBStr) FindNextDirectory(BBStr path, BBStr directory, BBStr def) {
     using namespace std;
@@ -67,4 +68,31 @@ BLITZ3D(void) DownloadFileThread(BBStr url, BBStr file) {
             hSession = NULL;
         }
         }).detach();
+}
+
+typedef std::unordered_map<std::string, int> S2IMap;
+
+BLITZ3D(S2IMap*) CreateS2IMap() {
+    return new S2IMap;
+}
+
+BLITZ3D(void) S2IMapSet(S2IMap* map, BBStr key, int value) {
+    (*map)[key] = value;
+}
+
+BLITZ3D(int) S2IMapGet(S2IMap* map, BBStr key) {
+    return (*map)[key];
+}
+
+BLITZ3D(int) S2IMapContains(S2IMap* map, BBStr key) {
+    return map->contains(key);
+}
+
+BLITZ3D(void) ClearS2IMap(S2IMap* map) {
+    map->clear();
+}
+
+BLITZ3D(void) DestroyS2IMap(S2IMap* map) {
+    delete map;
+    map = nullptr;
 }
