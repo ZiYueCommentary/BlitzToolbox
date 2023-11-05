@@ -2,7 +2,7 @@
 * Blib - A part of BlitzToolbox
 * Zip Utils for Blitz3D.
 *
-* v1.0 2022.10.3
+* v1.01 2023.11.5
 */
 
 #include "../BlitzToolbox.hpp"
@@ -54,28 +54,8 @@ BLITZ3D(void) BlibSetUnzipBaseDir(HZIP hzip, BBStr dir) {
 	SetUnzipBaseDir(hzip, dir);
 }
 
-BLITZ3D(int) BlibZipEntryIndex(ZIPENTRY* zipentry) {
-	return zipentry->index;
-}
-
 BLITZ3D(BBStr) BlibZipEntryName(ZIPENTRY* zipentry) {
 	return zipentry->name;
-}
-
-BLITZ3D(int) BlibZipEntryAttr(ZIPENTRY* zipentry) {
-	return zipentry->attr;
-}
-
-BLITZ3D(int) BlibZipEntryComSize(ZIPENTRY* zipentry) {
-	return zipentry->comp_size;
-}
-
-BLITZ3D(int) BlibZipEntryUncomSize(ZIPENTRY* zipentry) {
-	return zipentry->unc_size;
-}
-
-BLITZ3D(int) BlibHzipUnused(HZIP hzip) {
-	return hzip->unused;
 }
 
 BLITZ3D(void) BlibUnzip(BBStr zip, BBStr dst, BBStr password) {

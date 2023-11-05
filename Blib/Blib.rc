@@ -51,7 +51,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,0
+ FILEVERSION 1,0,1,0
  PRODUCTVERSION 1,0,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -69,9 +69,9 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "BlitzToolbox"
             VALUE "FileDescription", "Zip Utils for Blitz3D."
-            VALUE "FileVersion", "1.0.0.0"
+            VALUE "FileVersion", "1.0.1.0"
             VALUE "InternalName", "Blib.dll"
-            VALUE "LegalCopyright", "Copyright (C) 2022 ZiYueCommentary"
+            VALUE "LegalCopyright", "Copyright (C) 2023 ZiYueCommentary"
             VALUE "OriginalFilename", "Blib.dll"
             VALUE "ProductName", "Blib"
             VALUE "ProductVersion", "1.0.1.0"
