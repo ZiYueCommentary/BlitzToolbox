@@ -17,7 +17,7 @@ IniBufferKeyExist%(path$, section$, key$):"_IniBufferKeyExist@12"
 IniCreateSection(path$, section$):"_IniCreateSection@8"
 IniRemoveBufferKey(path$, section$, key$):"_IniRemoveBufferKey@12"
 IniRemoveBufferSection(path$, section$):"_IniRemoveBufferSection@8"
-IniSetExportBufferValue(buffer%, section$, key$, value$)"_IniSetExportBufferValue@16"
+IniSetExportBufferValue(buffer%, section$, key$, value$):"_IniSetExportBufferValue@16"
 
 ; they have default parameters so you need include "IniControler.bb"
 IniWriteBuffer_(path$, clearPrevious%):"_IniWriteBuffer@8"
