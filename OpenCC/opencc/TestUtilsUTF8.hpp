@@ -1,7 +1,7 @@
 /*
  * Open Chinese Convert
  *
- * Copyright 2010-2014 Carbo Kuo <byvoid@byvoid.com>
+ * Copyright 2020 Carbo Kuo <byvoid@byvoid.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,10 @@
 
 #pragma once
 
-#if defined(Opencc_BUILT_AS_STATIC) || !defined(_WIN32)
-#define OPENCC_EXPORT
-#define OPENCC_NO_EXPORT
-#else // if defined(Opencc_BUILT_AS_STATIC) || !defined(_WIN32)
-#ifndef OPENCC_EXPORT
-#define OPENCC_EXPORT __declspec(dllexport)
-#endif // ifndef OPENCC_EXPORT
+#include <string>
 
-#ifndef OPENCC_NO_EXPORT
-#define OPENCC_NO_EXPORT
-#endif // ifndef OPENCC_NO_EXPORT
-#endif // if defined(Opencc_BUILT_AS_STATIC) || !defined(_WIN32)
+namespace opencc {
+
+#define utf8(str) std::string(str)
+
+} // namespace opencc

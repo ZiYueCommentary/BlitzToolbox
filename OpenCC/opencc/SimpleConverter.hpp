@@ -18,6 +18,7 @@
 
 #include "Export.hpp"
 #include <string>
+#include <vector>
 
 #ifndef __OPENCC_SIMPLECONVERTER_HPP_
 #define __OPENCC_SIMPLECONVERTER_HPP_
@@ -29,6 +30,7 @@
  */
 
 namespace opencc {
+
 /**
  * A high level converter
  * This interface does not require C++11 to compile.
@@ -40,7 +42,25 @@ public:
    * Constructor of SimpleConverter
    * @param configFileName File name of configuration.
    */
-  SimpleConverter(const std::string& configFileName);
+  explicit SimpleConverter(const std::string& configFileName);
+
+  /**
+   * Constructor of SimpleConverter
+   * @param configFileName File name of configuration.
+   * @param paths Additional paths to locate configuration and dictionary files.
+   */
+  SimpleConverter(const std::string& configFileName,
+                  const std::vector<std::string>& paths);
+
+  /**
+   * Constructor of SimpleConverter
+   * @param configFileName File name of configuration.
+   * @param paths Additional paths to locate configuration and dictionary files.
+   * @param argv0 Path of the executable (argv[0]), in addition to additional
+   * paths.
+   */
+  SimpleConverter(const std::string& configFileName,
+                  const std::vector<std::string>& paths, const char* argv0);
 
   ~SimpleConverter();
 
@@ -66,7 +86,7 @@ public:
 
   /**
    * Converts a text and writes to an allocated buffer
-   * Please make sure the buffer has sufficent space.
+   * Please make sure the buffer has sufficient space.
    * @param input  A C-Style std::string (terminated by '\0') to be converted.
    * @param output Buffer to write the converted text.
    * @return       Length of converted text.
@@ -75,7 +95,7 @@ public:
 
   /**
    * Converts a text and writes to an allocated buffer
-   * Please make sure the buffer has sufficent space.
+   * Please make sure the buffer has sufficient space.
    * @param input  A C-Style std::string limited by a given length to be
    * converted.
    * @param length Maximal length in byte of the input std::string.

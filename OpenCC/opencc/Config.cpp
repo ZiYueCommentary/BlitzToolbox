@@ -43,11 +43,7 @@ namespace {
 
 class ConfigInternal {
 public:
-  std::string configDirectory;
-  std::unordered_map<
-      std::string,
-      std::unordered_map<std::string, std::unordered_map<std::string, DictPtr>>>
-      dictCache;
+  std::vector<std::string> paths;
 
   const JSONValue& GetProperty(const JSONValue& doc, const char* name) {
     if (!doc.HasMember(name)) {
@@ -88,16 +84,11 @@ public:
     if (SerializableDict::TryLoadFromFile<DICT>(fileName, &dict)) {
       return dict;
     }
-    // Configuration directory
-    if ((configDirectory != "") && SerializableDict::TryLoadFromFile<DICT>(
-                                       configDirectory + fileName, &dict)) {
-      return dict;
-    }
-    // Package data directory
-    if ((PACKAGE_DATA_DIRECTORY != "") &&
-        SerializableDict::TryLoadFromFile<DICT>(
-            PACKAGE_DATA_DIRECTORY + fileName, &dict)) {
-      return dict;
+    for (const std::string& dirPath : paths) {
+      std::string path = dirPath + '/' + fileName;
+      if (SerializableDict::TryLoadFromFile<DICT>(path, &dict)) {
+        return dict;
+      }
     }
     throw FileNotFound(fileName);
   }
@@ -138,15 +129,7 @@ public:
       return DictGroupPtr(new DictGroup(dicts));
     } else {
       std::string fileName = GetStringProperty(doc, "file");
-      // Read from cache
-      DictPtr& cache = dictCache[type][configDirectory][fileName];
-      if (cache != nullptr) {
-        return cache;
-      }
       DictPtr dict = LoadDictFromFile(type, fileName);
-
-      // Update Cache
-      cache = dict;
       return dict;
     }
   }
@@ -209,17 +192,54 @@ public:
         return prefixedFileName;
       }
     }
+
+    for (const std::string& dirPath : paths) {
+      std::string path = dirPath + '/' + fileName;
+      ifs.open(UTF8Util::GetPlatformString(path).c_str());
+      if (ifs.is_open()) {
+        return path;
+      }
+    }
+
     throw FileNotFound(fileName);
   }
 };
+
+std::string GetParentDirectory(const std::string& path) {
+  size_t pos = path.rfind('/', path.length() - 1);
+  if (pos == std::string::npos) {
+    pos = path.rfind('\\', path.length() - 1);
+  }
+  if (pos == std::string::npos) {
+    return "";
+  }
+  return path.substr(0, pos + 1);
+}
+
 } // namespace
 
 Config::Config() : internal(new ConfigInternal()) {}
 
-Config::~Config() { delete (ConfigInternal*)internal; }
+Config::~Config() { delete reinterpret_cast<ConfigInternal*>(internal); }
 
 ConverterPtr Config::NewFromFile(const std::string& fileName) {
-  ConfigInternal* impl = (ConfigInternal*)internal;
+  return NewFromFile(fileName, std::vector<std::string>{}, nullptr);
+}
+
+ConverterPtr Config::NewFromFile(const std::string& fileName,
+                                 const std::vector<std::string>& paths,
+                                 const char* argv0) {
+  ConfigInternal* impl = reinterpret_cast<ConfigInternal*>(internal);
+  impl->paths = paths;
+  if (argv0 != nullptr) {
+    std::string parent = GetParentDirectory(argv0);
+    if (!parent.empty()) {
+      impl->paths.push_back(parent);
+    }
+  }
+  if (PACKAGE_DATA_DIRECTORY != "") {
+    impl->paths.push_back(PACKAGE_DATA_DIRECTORY);
+  }
   std::string prefixedFileName = impl->FindConfigFile(fileName);
   std::ifstream ifs(UTF8Util::GetPlatformString(prefixedFileName));
   std::string content(std::istreambuf_iterator<char>(ifs),
@@ -233,11 +253,27 @@ ConverterPtr Config::NewFromFile(const std::string& fileName) {
   if (slashPos != std::string::npos) {
     configDirectory = prefixedFileName.substr(0, slashPos) + "/";
   }
-  return NewFromString(content, configDirectory);
+  if (!configDirectory.empty()) {
+    impl->paths.push_back(configDirectory);
+  }
+  return NewFromString(content, impl->paths);
 }
 
 ConverterPtr Config::NewFromString(const std::string& json,
                                    const std::string& configDirectory) {
+  std::vector<std::string> paths;
+  if (!configDirectory.empty()) {
+    if (configDirectory.back() == '/' || configDirectory.back() == '\\') {
+      paths.push_back(configDirectory);
+    } else {
+      paths.push_back(configDirectory + '/');
+    }
+  }
+  return NewFromString(json, paths);
+}
+
+ConverterPtr Config::NewFromString(const std::string& json,
+                                   const std::vector<std::string>& paths) {
   rapidjson::Document doc;
 
   doc.ParseInsitu<0>(const_cast<char*>(json.c_str()));
@@ -254,15 +290,8 @@ ConverterPtr Config::NewFromString(const std::string& json,
     name = doc["name"].GetString();
   }
 
-  ConfigInternal* impl = (ConfigInternal*)internal;
-  if (!configDirectory.empty()) {
-    if (configDirectory.back() == '/' || configDirectory.back() == '\\')
-      impl->configDirectory = configDirectory;
-    else
-      impl->configDirectory = configDirectory + '/';
-  } else {
-    impl->configDirectory.clear();
-  }
+  ConfigInternal* impl = reinterpret_cast<ConfigInternal*>(internal);
+  impl->paths = paths;
 
   // Required: segmentation
   SegmentationPtr segmentation =
