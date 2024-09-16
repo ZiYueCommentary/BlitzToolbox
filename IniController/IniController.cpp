@@ -1,5 +1,5 @@
 /*
-* IniController - A part of BlitzToolBox
+* IniController - A part of BlitzToolbox
 * Reading & writing INI files.
 * 
 * v1.08 2024.9.16
