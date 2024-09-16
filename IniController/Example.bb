@@ -1,4 +1,4 @@
-Include "IniControler.bb"
+Include "IniController.bb"
 
 IniWriteString("options.ini", "foo", "bar", "wow")
 IniWriteBuffer("options.ini")

@@ -15,15 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="IniControler.cpp">
+    <ClCompile Include="IniController.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="IniControler.decls">
+    <None Include="IniController.decls">
       <Filter>资源文件</Filter>
     </None>
-    <None Include="IniControler.bb">
+    <None Include="IniController.bb">
       <Filter>资源文件</Filter>
     </None>
     <None Include="Example.bb">
@@ -36,7 +36,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="IniControler.rc">
+    <ResourceCompile Include="IniController.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
   </ItemGroup>

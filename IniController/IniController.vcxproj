@@ -22,8 +22,9 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{adc74f07-a6cc-4bdd-91b2-3a907940b040}</ProjectGuid>
-    <RootNamespace>IniControler</RootNamespace>
+    <RootNamespace>IniController</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>IniController</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -138,18 +139,18 @@ copy /y $(SolutionDir)$(ProjectName)\Example.bb $(SolutionDir)Build\$(ProjectNam
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="IniControler.cpp" />
+    <ClCompile Include="IniController.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Example.bb" />
-    <None Include="IniControler.bb" />
-    <None Include="IniControler.decls" />
+    <None Include="Example.bb"/>
+    <None Include="IniController.bb" />
+    <None Include="IniController.decls" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="IniControler.rc" />
+    <ResourceCompile Include="IniController.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
