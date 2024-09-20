@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// ÖÐÎÄ(¼òÌå£¬ÖÐ¹ú) resources
+// ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½å£¬ï¿½Ð¹ï¿½) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
@@ -51,7 +51,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,6,2
+ FILEVERSION 1,0,8,0
  PRODUCTVERSION 1,0,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -68,12 +68,16 @@ BEGIN
         BLOCK "000004b0"
         BEGIN
             VALUE "CompanyName", "BlitzToolbox"
-            VALUE "FileDescription", "Write & Read ini file for Blitz3D. Custom unordered map edition for scpcb-ue."
-            VALUE "FileVersion", "1.0.6.2"
-            VALUE "InternalName", "IniControler.dll"
-            VALUE "LegalCopyright", "Copyright (C) 2023 Ultimate Edition Team"
+#ifdef NORMALIZE_PATH
+            VALUE "FileDescription", "Reading & writing INI files for Blitz3D."
+#else
+            VALUE "FileDescription", "Reading & writing INI files for Blitz3D. Strict file path edition."
+#endif
+            VALUE "FileVersion", "1.0.8.0"
+            VALUE "InternalName", "IniController.dll"
+            VALUE "LegalCopyright", "Copyright (C) 2024 ZiYueCommentary"
             VALUE "OriginalFilename", "IniControler.dll"
-            VALUE "ProductName", "IniControler"
+            VALUE "ProductName", "IniController"
             VALUE "ProductVersion", "1.0.1.0"
         END
     END
@@ -83,7 +87,7 @@ BEGIN
     END
 END
 
-#endif    // ÖÐÎÄ(¼òÌå£¬ÖÐ¹ú) resources
+#endif    // ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½å£¬ï¿½Ð¹ï¿½) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

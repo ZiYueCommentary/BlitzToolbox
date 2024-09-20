@@ -24,7 +24,7 @@
 
 #include "Lexicon.hpp"
 #include "MarisaDict.hpp"
-#include "SerializedValues.hpp" 
+#include "SerializedValues.hpp"
 
 using namespace opencc;
 

@@ -67,11 +67,12 @@ void BinaryDict::SerializeToFile(FILE* fp) const {
 }
 
 BinaryDictPtr BinaryDict::NewFromFile(FILE* fp) {
-  size_t offsetBound, savedOffset;
-  savedOffset = ftell(fp);
+  long savedOffset = ftell(fp);
   fseek(fp, 0L, SEEK_END);
-  offsetBound = ftell(fp) - savedOffset;
+  long offsetBoundLong = ftell(fp) - savedOffset;
   fseek(fp, savedOffset, SEEK_SET);
+  assert(offsetBoundLong >= 0);
+  size_t offsetBound = static_cast<size_t>(offsetBoundLong);
 
   BinaryDictPtr dict(new BinaryDict(LexiconPtr(new Lexicon)));
 

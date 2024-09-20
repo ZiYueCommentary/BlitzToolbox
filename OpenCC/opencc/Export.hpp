@@ -18,22 +18,12 @@
 
 #pragma once
 
-#define libopencc_EXPORTS
-
 #if defined(Opencc_BUILT_AS_STATIC) || !defined(_WIN32)
 #define OPENCC_EXPORT
 #define OPENCC_NO_EXPORT
 #else // if defined(Opencc_BUILT_AS_STATIC) || !defined(_WIN32)
 #ifndef OPENCC_EXPORT
-#ifdef libopencc_EXPORTS
-
-/* We are building this library */
 #define OPENCC_EXPORT __declspec(dllexport)
-#else // ifdef libopencc_EXPORTS
-
-/* We are using this library */
-#define OPENCC_EXPORT __declspec(dllimport)
-#endif // ifdef libopencc_EXPORTS
 #endif // ifndef OPENCC_EXPORT
 
 #ifndef OPENCC_NO_EXPORT

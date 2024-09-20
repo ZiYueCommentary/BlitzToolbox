@@ -19,9 +19,10 @@
 #pragma once
 
 #ifdef _MSC_VER
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #include <Windows.h>
-#undef NOMINMAX
 #endif // _MSC_VER
 
 #include <cstring>
@@ -145,7 +146,7 @@ public:
   }
 
   /**
-   * Returns ture if the character is a line ending or end of file.
+   * Returns true if the character is a line ending or end of file.
    */
   static bool IsLineEndingOrFileEnding(const char ch) {
     return ch == '\0' || ch == '\n' || ch == '\r';

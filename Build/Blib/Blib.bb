@@ -1,6 +1,6 @@
 ; Blib - A part of BlitzToolbox
 ; Zip Utils for Blitz3D.
-; v1.0 2022.10.3
+; v1.01 2023.11.5
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
 Function BlibCreateZip%(file$, password$ = "")

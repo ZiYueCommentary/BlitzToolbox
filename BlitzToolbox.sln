@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenCC", "OpenCC\OpenCC.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NetworkConnector", "NetworkConnector\NetworkConnector.vcxproj", "{0EA4AC02-488B-4565-B4AA-6B2F9A2507DD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IniControler", "IniControler\IniControler.vcxproj", "{ADC74F07-A6CC-4BDD-91B2-3A907940B040}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IniController", "IniController\IniController.vcxproj", "{ADC74F07-A6CC-4BDD-91B2-3A907940B040}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlitzFormat", "BlitzFormat\BlitzFormat.vcxproj", "{92D30A30-4CA2-4676-B79D-4D0544135FA3}"
 EndProject
