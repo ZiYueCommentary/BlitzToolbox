@@ -2,7 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by IniController.rc
 
-#define NORMALIZE_PATH
+//#define NORMALIZE_PATH
 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS

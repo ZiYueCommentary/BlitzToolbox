@@ -1,8 +1,8 @@
-/*
+﻿/*
 * IniController - A part of BlitzToolbox
 * Reading & writing INI files.
 * 
-* v1.08 2024.9.16
+* v1.081 2024.9.20
 */
 
 #include "resource.h"
@@ -444,4 +444,19 @@ BLITZ3D(void) IniExportXml(BBStr path, BBStr xml, bool isMin, bool allowBuffer) 
 
 BLITZ3D(void) IniBufferExportXml(BBStr path, BBStr xml, bool isMin) {
 	ExportXml(std::move(IniBuffer[NORMALIZE_PATH(path)]), path, xml, isMin);
+}
+
+BLITZ3D(BBStr) FindSCP294Drink(BBStr file, BBStr drink) {
+	using namespace std;
+
+	auto& buffer = IniBuffer[file];
+	for (auto section = buffer.begin(); section != buffer.end(); section++) {
+		std::vector<std::string> vec = BlitzToolbox::split_string(section->first, "|");
+		for (std::string drink1 : vec) {
+			if (BlitzToolbox::to_lower_string(drink1) == BlitzToolbox::to_lower_string(drink)) {
+				return BlitzToolbox::getCharPtr(section->first + ","s + drink1);
+			}
+		}
+	}
+	return "Null"; // found nothing ¯\_(ツ)_/¯
 }
