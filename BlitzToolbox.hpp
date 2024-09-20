@@ -6,8 +6,12 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <Windows.h>
 
 #define BLITZ3D(x) extern "C" __declspec(dllexport) x _stdcall
+#define BLITZ3D_RUNTIME_ERROR 0xE0000001
+#define BLITZ3D_RUNTIME_EXCEPTION 0xE0000002
+#define _NORETURN [[noreturn]]
 typedef const char* BBStr;
 
 namespace BlitzToolbox {
@@ -17,7 +21,7 @@ namespace BlitzToolbox {
         const char* p = cha;
         return p;
     }
-    
+
     _NODISCARD _CONSTEXPR20 std::string replace_all(const std::string& string, const std::string& pattern, const std::string& newpat) {
         std::string str = string;
         const unsigned nsize = newpat.size();
@@ -29,7 +33,7 @@ namespace BlitzToolbox {
         }
         return str;
     }
-    
+
     _NODISCARD _CONSTEXPR20 std::string json_friendly_string(const std::string& str) {
         std::string result = str;
         result = replace_all(result, "\\", "\\\\");
@@ -79,4 +83,31 @@ namespace BlitzToolbox {
         // Windows is not case sensitive
         return to_lower_string(std::filesystem::absolute(path).lexically_normal().generic_string());
     }
+
+#ifdef BLITZ3DTSS
+    _NORETURN inline void runtime_error(const std::string& message) {
+        BlitzToolbox::runtime_error(BlitzToolbox::getCharPtr(message));
+    }
+
+    _NORETURN inline void runtime_error(BBStr message) {
+        ULONG_PTR args[1]{};
+        args[0] = reinterpret_cast<ULONG_PTR>(message);
+        RaiseException(BLITZ3D_RUNTIME_ERROR, 0, 1, args);
+    }
+
+    inline void runtime_exception(BBStr function, const std::string& message) {
+        BlitzToolbox::runtime_exception(function, BlitzToolbox::getCharPtr(message));
+    }
+
+    inline void runtime_exception(const std::string& function, const std::string& message) {
+        BlitzToolbox::runtime_exception(BlitzToolbox::getCharPtr(function), BlitzToolbox::getCharPtr(message));
+    }
+
+    inline void runtime_exception(BBStr function, BBStr message) {
+        ULONG_PTR args[2]{};
+        args[0] = reinterpret_cast<ULONG_PTR>(function);
+        args[1] = reinterpret_cast<ULONG_PTR>(message);
+        RaiseException(BLITZ3D_RUNTIME_EXCEPTION, 0, 2, args);
+    }
+#endif
 }
