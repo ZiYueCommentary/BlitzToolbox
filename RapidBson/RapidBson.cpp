@@ -2,7 +2,7 @@
 * RapidBson - A part of BlitzToolbox
 * A fast JSON parser/generator for Blitz3D with both SAX/DOM style API.
 *
-* v1.0 2024.9.17
+* v1.0 2024.10.3
 */
 
 ///////////////////////////
@@ -31,137 +31,251 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 }
 
 using namespace rapidjson;
-using Array = GenericValue<UTF8<>>::Array;
 typedef void* Object;
 
-struct DocumentObj {
-    BBStr identifier = DOCUMENT_IDENT;
-    Document document;
+enum class VariableTypes
+{
+    Document, Value, Array
 };
 
-BLITZ3D(DocumentObj*) JsonParseFromFile(BBStr path) {
+struct JsonVariable {
+    VariableTypes type;
+    union {
+        Document document = nullptr;
+        Value value;
+        GenericValue<UTF8<>>::Array array;
+    };
+
+    JsonVariable(VariableTypes type) {
+        this->type = type;
+    }
+};
+
+BLITZ3D(JsonVariable*) JsonParseFromFile(BBStr path) {
     std::ifstream file(path);
     std::string json, line;
     while (std::getline(file, line)) {
         json += line + '\n';
     }
-    DocumentObj* obj = new DocumentObj();
-    obj->document.Parse<kParseCommentsFlag>(json.c_str());
-    if (obj->document.HasParseError()) BlitzToolbox::runtime_exception("JsonParseFromFile", std::format("Document parsing failed: {}!", path));
-    return obj;
+    JsonVariable* object = new JsonVariable(VariableTypes::Document);
+    object->document = Document();
+    object->document.Parse<kParseCommentsFlag>(json.c_str());
+    if (object->document.HasParseError()) BlitzToolbox::runtime_exception("JsonParseFromFile", std::format("Document parsing failed: {}", path));
+    return object;
 }
 
-BLITZ3D(DocumentObj*) JsonParseFromString(BBStr json) {
-    DocumentObj* obj = new DocumentObj();
-    obj->document.Parse<kParseCommentsFlag>(json);
-    if (obj->document.HasParseError()) BlitzToolbox::runtime_exception("JsonParseFromFile", std::format("Document parsing failed: {}", json));
-    return obj;
+BLITZ3D(JsonVariable*) JsonParseFromString(BBStr json) {
+    JsonVariable* object = new JsonVariable(VariableTypes::Document);
+    object->document.Parse<kParseCommentsFlag>(json);
+    if (object->document.HasParseError()) BlitzToolbox::runtime_exception("JsonParseFromFile", std::format("Document parsing failed: {}", json));
+    return object;
 }
 
-BLITZ3D(Value*) JsonGetValue(Object obj, BBStr name) {
-    DocumentObj* doc = reinterpret_cast<DocumentObj*>(obj);
-    if (doc->identifier == DOCUMENT_IDENT) { // obj is a document
-        if (!doc->document.HasMember(name)) BlitzToolbox::runtime_exception("JsonGetValue", std::format("No value named \"{}\" in document!", name));
-        return &doc->document[name];
+BLITZ3D(JsonVariable*) JsonGetValue(JsonVariable* object, BBStr name) {
+    switch (object->type) {
+    case VariableTypes::Document: {
+        if (!object->document.HasMember(name)) {
+            BlitzToolbox::runtime_exception("JsonGetValue", std::format("No value named \"{}\" in document!", name));
+            return nullptr;
+        }
+        JsonVariable* value = new JsonVariable(VariableTypes::Value);
+        value->value = object->document[name];
+        return value;
     }
-    else { // obj is a value
-        Value* val = reinterpret_cast<Value*>(obj);
-        if (!val->HasMember(name)) BlitzToolbox::runtime_exception("JsonGetValue", std::format("No value named \"{}\" in value!", name));
-        return &(*val)[name];
+    case VariableTypes::Value: {
+        if (!object->value.HasMember(name)) {
+            BlitzToolbox::runtime_exception("JsonGetValue", std::format("No value named \"{}\" in value!", name));
+            return nullptr;
+        }
+        JsonVariable* value = new JsonVariable(VariableTypes::Value);
+        value->value = object->value[name];
+        return value;
     }
-}
-
-BLITZ3D(int) JsonIsString(Value* value) {
-    return value->IsString();
-}
-
-BLITZ3D(int) JsonIsInt(Value* value) {
-    return value->IsInt();
-}
-
-BLITZ3D(int) JsonIsFloat(Value* value) {
-    return value->IsFloat();
-}
-
-BLITZ3D(int) JsonIsBool(Value* value) {
-    return value->IsBool();
-}
-
-BLITZ3D(int) JsonIsArray(Object* obj) {
-    DocumentObj* doc = reinterpret_cast<DocumentObj*>(obj);
-    if (doc->identifier == DOCUMENT_IDENT) { // obj is a document
-        return doc->document.IsArray();
+    default: {
+        BlitzToolbox::runtime_exception("JsonGetValue", "Invalid argument!");
+        return nullptr;
     }
-    else { // obj is a value
-        Value* val = reinterpret_cast<Value*>(obj);
-        return val->IsArray();
     }
 }
 
-BLITZ3D(int) JsonIsObject(Object* obj) {
-    DocumentObj* doc = reinterpret_cast<DocumentObj*>(obj);
-    if (doc->identifier == DOCUMENT_IDENT) { // obj is a document
-        return doc->document.IsObject();
+BLITZ3D(int) JsonIsString(JsonVariable* object) {
+    if (object->type == VariableTypes::Value) {
+        return object->value.IsString();
     }
-    else { // obj is a value
-        Value* val = reinterpret_cast<Value*>(obj);
-        return val->IsObject();
-    }
-}
-
-BLITZ3D(int) JsonIsNull(Object obj) {
-    if (obj == nullptr) return true;
-    DocumentObj* doc = reinterpret_cast<DocumentObj*>(obj);
-    if (doc->identifier == DOCUMENT_IDENT) { // obj is a document
-        return doc->document.IsNull();
-    }
-    else { // obj is a value
-        Value* val = reinterpret_cast<Value*>(obj);
-        return val->IsNull();
+    else {
+        BlitzToolbox::runtime_exception("JsonIsString", "Invalid argument!");
+        return false;
     }
 }
 
-BLITZ3D(BBStr) JsonGetString(Value* value) {
-    if (!value->IsString()) BlitzToolbox::runtime_exception("JsonGetString", "Value is not a string!");
-    return value->GetString();
-}
-
-BLITZ3D(int) JsonGetInt(Value* value) {
-    if (!value->IsInt()) BlitzToolbox::runtime_exception("JsonGetInt", "Value is not an integer!");
-    return value->GetInt();
-}
-
-BLITZ3D(float) JsonGetFloat(Value* value) {
-    if (!value->IsFloat()) BlitzToolbox::runtime_exception("JsonGetFloat", "Value is not a float!");
-    return value->GetFloat();
-}
-
-BLITZ3D(int) JsonGetBool(Value* value) {
-    if (!value->IsBool()) BlitzToolbox::runtime_exception("JsonGetBool", "Value is not a boolean!");
-    return value->GetBool();
-}
-
-BLITZ3D(Array*) JsonGetArray(Object* obj) {
-    DocumentObj* doc = reinterpret_cast<DocumentObj*>(obj);
-    if (doc->identifier == DOCUMENT_IDENT) { // obj is a document
-        if (!doc->document.IsArray()) BlitzToolbox::runtime_exception("JsonGetArray", "Document is not an array!");
-        return new Array(doc->document.GetArray());
+BLITZ3D(int) JsonIsInt(JsonVariable* object) {
+    if (object->type == VariableTypes::Value) {
+        return object->value.IsInt();
     }
-    else { // obj is a value
-        Value* val = reinterpret_cast<Value*>(obj);
-        if (!val->IsArray()) BlitzToolbox::runtime_exception("JsonGetArray", "Value is not an array!");
-        return new Array(val->GetArray());
+    else {
+        BlitzToolbox::runtime_exception("JsonIsInt", "Invalid argument!");
+        return false;
     }
 }
 
-BLITZ3D(int) JsonGetArraySize(Array* array) {
-    return array->Size();
+BLITZ3D(int) JsonIsFloat(JsonVariable* object) {
+    if (object->type == VariableTypes::Value) {
+        return object->value.IsFloat();
+    }
+    else {
+        BlitzToolbox::runtime_exception("JsonIsFloat", "Invalid argument!");
+        return false;
+    }
 }
 
-BLITZ3D(Value*) JsonGetArrayValue(Array* array, int index) {
-    return &(*array)[index];
+BLITZ3D(int) JsonIsBool(JsonVariable* object) {
+    if (object->type == VariableTypes::Value) {
+        return object->value.IsFloat();
+    }
+    else {
+        BlitzToolbox::runtime_exception("JsonIsBool", "Invalid argument!");
+        return false;
+    }
 }
 
-BLITZ3D(int) JsonGetArrayCapacity(Array* array) {
-    return array->Capacity();
+BLITZ3D(int) JsonIsArray(JsonVariable* object) {
+    switch (object->type) {
+    case VariableTypes::Document: {
+        return object->document.IsArray();
+    }
+    case VariableTypes::Value: {
+        return object->value.IsArray();
+    }
+    default: {
+        BlitzToolbox::runtime_exception("JsonIsArray", "Invalid argument!");
+        return false;
+    }
+    }
+}
+
+BLITZ3D(int) JsonIsObject(JsonVariable* object) {
+    switch (object->type) {
+    case VariableTypes::Document: {
+        return object->document.IsObject();
+    }
+    case VariableTypes::Value: {
+        return object->value.IsObject();
+    }
+    default: {
+        BlitzToolbox::runtime_exception("JsonIsObject", "Invalid argument!");
+        return false;
+    }
+    }
+}
+
+BLITZ3D(int) JsonIsNull(JsonVariable* object) {
+    switch (object->type) {
+    case VariableTypes::Document: {
+        return object->document.IsNull();
+    }
+    case VariableTypes::Value: {
+        return object->value.IsNull();
+    }
+    default: {
+        BlitzToolbox::runtime_exception("JsonIsNull", "Invalid argument!");
+        return false;
+    }
+    }
+}
+
+BLITZ3D(BBStr) JsonGetString(JsonVariable* object) {
+    if (object->type == VariableTypes::Value) {
+        return object->value.GetString();
+    }
+    else {
+        BlitzToolbox::runtime_exception("JsonGetString", "Invalid argument!");
+        return "";
+    }
+}
+
+BLITZ3D(int) JsonGetInt(JsonVariable* object) {
+    if (object->type == VariableTypes::Value) {
+        return object->value.GetInt();
+    }
+    else {
+        BlitzToolbox::runtime_exception("JsonGetInt", "Invalid argument!");
+        return 0;
+    }
+}
+
+BLITZ3D(float) JsonGetFloat(JsonVariable* object) {
+    if (object->type == VariableTypes::Value) {
+        return object->value.GetFloat();
+    }
+    else {
+        BlitzToolbox::runtime_exception("JsonGetFloat", "Invalid argument!");
+        return 0;
+    }
+}
+
+BLITZ3D(int) JsonGetBool(JsonVariable* object) {
+    if (object->type == VariableTypes::Value) {
+        return object->value.GetBool();
+    }
+    else {
+        BlitzToolbox::runtime_exception("JsonGetBool", "Invalid argument!");
+        return 0;
+    }
+}
+
+BLITZ3D(JsonVariable*) JsonGetArray(JsonVariable* object) {
+    switch (object->type) {
+    case VariableTypes::Document: {
+        JsonVariable* array = new JsonVariable(VariableTypes::Array);
+        array->array = object->document.GetArray();
+        return array;
+    }
+    case VariableTypes::Value: {
+        JsonVariable* array = new JsonVariable(VariableTypes::Array);
+        array->array = object->value.GetArray();
+        return array;
+    }
+    default: {
+        BlitzToolbox::runtime_exception("JsonGetArray", "Invalid argument!");
+        return nullptr;
+    }
+    }
+}
+
+BLITZ3D(int) JsonGetArraySize(JsonVariable* object) {
+    if (object->type == VariableTypes::Array) {
+        return object->array.Size();
+    }
+    else {
+        BlitzToolbox::runtime_exception("JsonGetArraySize", "Invalid argument!");
+        return 0;
+    }
+}
+
+BLITZ3D(JsonVariable*) JsonGetArrayValue(JsonVariable* object, int index) {
+    if (object->type == VariableTypes::Array) {
+        if (object->array.Size() >= index) {
+            BlitzToolbox::runtime_exception("JsonGetArrayValue", "Array index out of bounds!");
+            return nullptr;
+        }
+        else {
+            JsonVariable* value = new JsonVariable(VariableTypes::Value);
+            value->value = object->array[index];
+            return value;
+        }
+    }
+    else {
+        BlitzToolbox::runtime_exception("JsonGetArrayValue", "Invalid argument!");
+        return nullptr;
+    }
+}
+
+BLITZ3D(int) JsonGetArrayCapacity(JsonVariable* object) {
+    if (object->type == VariableTypes::Array) {
+        return object->array.Capacity();
+    }
+    else {
+        BlitzToolbox::runtime_exception("JsonGetArrayCapacity", "Invalid argument!");
+        return 0;
+    }
 }
