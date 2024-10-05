@@ -10,6 +10,7 @@
 #include <filesystem>
 #include <wininet.h>
 #include <unordered_map>
+#include <thread>
 
 BLITZ3D(BBStr) FindNextDirectory(BBStr path, BBStr directory, BBStr def) {
     using namespace std;
@@ -38,7 +39,14 @@ BLITZ3D(BBStr) FindNextDirectory(BBStr path, BBStr directory, BBStr def) {
     return def;
 }
 
+static int size = 0;
+
+BLITZ3D(int) GetDownloadFileThreadSize() {
+    return size;
+}
+
 BLITZ3D(void) DownloadFileThread(BBStr url, BBStr file) {
+    size = 0;
     BBStr cUrl = BlitzToolbox::getCharPtr(url);
     BBStr cFile = BlitzToolbox::getCharPtr(file);
     std::thread([cUrl, cFile]() {
@@ -54,13 +62,14 @@ BLITZ3D(void) DownloadFileThread(BBStr url, BBStr file) {
             HINTERNET handle2 = InternetOpenUrl(hSession, cUrl, NULL, 0, INTERNET_FLAG_DONT_CACHE, 0);
             if (handle2 != NULL)
             {
+                fopen_s(&stream, cFile, "ab+");
                 while (Number > 0)
                 {
-                    fopen_s(&stream, cFile, "ab+");
                     InternetReadFile(handle2, Temp, 1024 - 1, &Number);
+                    size += Number;
                     fwrite(Temp, sizeof(char), Number, stream);
-                    fclose(stream);
                 }
+                fclose(stream);
                 InternetCloseHandle(handle2);
                 handle2 = NULL;
             }
@@ -74,6 +83,14 @@ typedef std::unordered_map<std::string, int> S2IMap;
 
 BLITZ3D(S2IMap*) CreateS2IMap() {
     return new S2IMap;
+}
+
+BLITZ3D(int) S2IMapSize(S2IMap* map) {
+    return map->size();
+}
+
+BLITZ3D(void) S2IMapErase(S2IMap* map, BBStr key) {
+    map->erase(key);
 }
 
 BLITZ3D(void) S2IMapSet(S2IMap* map, BBStr key, int value) {

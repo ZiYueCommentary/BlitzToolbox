@@ -7,7 +7,10 @@
 
 FindNextDirectory$(path$, directory$, default$):"_FindNextDirectory@12"
 DownloadFileThread(url$, file$):"_DownloadFileThread@8"
+GetDownloadFileThreadSize%():"_GetDownloadFileThreadSize@0"
 CreateS2IMap%():"_CreateS2IMap@0"
+S2IMapSize%(map%):"_S2IMapSize@4"
+S2IMapErase(map%, key$):"_S2IMapErase@8"
 S2IMapSet(map%, key$, value%):"_S2IMapSet@12"
 S2IMapGet%(map%, key$):"_S2IMapGet@8"
 S2IMapContains%(map%, key$):"_S2IMapContains@8"
