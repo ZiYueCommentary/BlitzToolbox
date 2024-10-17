@@ -11,21 +11,17 @@
 
 #define BLITZ3DTSS
 
-#define DOCUMENT_IDENT "_RapidBson@DocObj"
-#define SAFE_TYPE(value, type) (value)->Is##type() ? (value)->Get##type() : NULL
-
 #include "rapidjson/document.h"
-#include "rapidjson/prettywriter.h"
 #include <fstream>
 #include <string>
+#include <iostream>
 #include <Windows.h>
 #include "../BlitzToolbox.hpp"
-#include <functional>
 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH)
     {
-        printf_s("RapidBson: In the development stage. May not be stable or useable. \n");
+        std::clog << "RapidBson: In the development stage. May not be stable or useable.\n";
     }
     return TRUE;
 }
@@ -33,23 +29,44 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 using namespace rapidjson;
 using Array = GenericValue<UTF8<>>::Array;
 
-enum class VariableTypes
+enum class VariableType
 {
     Document, Value, Array, Null
 };
 
 struct JsonVariable {
-    VariableTypes type;
+    VariableType type;
     union {
         Document* JsonDocument = nullptr;
         Value* JsonValue;
         Array* JsonArray;
     };
 
-    JsonVariable(VariableTypes type) {
+    JsonVariable(VariableType type) {
         this->type = type;
     }
 };
+
+enum __SuppressWarning {
+    kNoSuppressedWarnings,
+    kNoRuntimeExceptions,
+    kNoExceptionLogs
+};
+
+static int _SuppressedWarnings = kNoSuppressedWarnings;
+
+constexpr void __rapidbson_runtime_exception(BBStr function, const std::string& message) {
+    if (!(_SuppressedWarnings & kNoRuntimeExceptions)) {
+        BlitzToolbox::runtime_exception(function, message);
+    }
+    if (!(_SuppressedWarnings & kNoExceptionLogs)) {
+        std::cerr << std::format("{}: {}\n", function, message);
+    }
+}
+
+BLITZ3D(void) JsonSuppressWarnings(int flags) {
+    _SuppressedWarnings = flags;
+}
 
 BLITZ3D(JsonVariable*) JsonParseFromFile(BBStr path) {
     std::ifstream file(path);
@@ -57,98 +74,137 @@ BLITZ3D(JsonVariable*) JsonParseFromFile(BBStr path) {
     while (std::getline(file, line)) {
         json += line + '\n';
     }
-    JsonVariable* object = new JsonVariable(VariableTypes::Document);
+    JsonVariable* object = new JsonVariable(VariableType::Document);
     object->JsonDocument = new Document();
     object->JsonDocument->Parse<kParseCommentsFlag>(json.c_str());
-    if (object->JsonDocument->HasParseError()) BlitzToolbox::runtime_exception("JsonParseFromFile", std::format("Document parsing failed: {}", path));
+    if (object->JsonDocument->HasParseError()) {
+        __rapidbson_runtime_exception("JsonParseFromFile", std::format("Document parsing failed: {}", path));
+    }
     return object;
 }
 
 BLITZ3D(JsonVariable*) JsonParseFromString(BBStr json) {
-    JsonVariable* object = new JsonVariable(VariableTypes::Document);
+    JsonVariable* object = new JsonVariable(VariableType::Document);
     object->JsonDocument = new Document();
     object->JsonDocument->Parse<kParseCommentsFlag>(json);
-    if (object->JsonDocument->HasParseError()) BlitzToolbox::runtime_exception("JsonParseFromString", std::format("Document parsing failed: {}", json));
+    if (object->JsonDocument->HasParseError()) {
+        __rapidbson_runtime_exception("JsonParseFromString", std::format("Document parsing failed: {}", json));
+    }
     return object;
+}
+
+BLITZ3D(int) JsonHasParseError(JsonVariable* document) {
+    if (document->type == VariableType::Document) {
+        return document->JsonDocument->HasParseError();
+    }
+    else {
+        __rapidbson_runtime_exception("JsonHasParseError", "Invalid argument!");
+        return false;
+    }
+}
+
+BLITZ3D(int) JsonGetParseErrorCode(JsonVariable* document) {
+    if (document->type == VariableType::Document) {
+        return document->JsonDocument->GetParseError();
+    }
+    else {
+        __rapidbson_runtime_exception("JsonGetParseErrorCode", "Invalid argument!");
+        return -1;
+    }
 }
 
 BLITZ3D(JsonVariable*) JsonGetValue(JsonVariable* object, BBStr name) {
     switch (object->type) {
-    case VariableTypes::Document: {
+    case VariableType::Document: {
         if (!object->JsonDocument->HasMember(name)) {
-            BlitzToolbox::runtime_exception("JsonGetValue", std::format("No value named \"{}\" in document!", name));
-            return new JsonVariable(VariableTypes::Null);
+            __rapidbson_runtime_exception("JsonGetValue", std::format("No value named \"{}\" in document!", name));
+            return new JsonVariable(VariableType::Null);
         }
-        JsonVariable* value = new JsonVariable(VariableTypes::Value);
+        JsonVariable* value = new JsonVariable(VariableType::Value);
         value->JsonValue = &(*object->JsonDocument)[name];
         return value;
     }
-    case VariableTypes::Value: {
+    case VariableType::Value: {
         if (!object->JsonValue->HasMember(name)) {
-            BlitzToolbox::runtime_exception("JsonGetValue", std::format("No value named \"{}\" in value!", name));
-            return new JsonVariable(VariableTypes::Null);
+            __rapidbson_runtime_exception("JsonGetValue", std::format("No value named \"{}\" in value!", name));
+            return new JsonVariable(VariableType::Null);
         }
-        JsonVariable* value = new JsonVariable(VariableTypes::Value);
+        JsonVariable* value = new JsonVariable(VariableType::Value);
         value->JsonValue = &(*object->JsonValue)[name];
         return value;
     }
     default: {
-        BlitzToolbox::runtime_exception("JsonGetValue", "Invalid argument!");
-        return new JsonVariable(VariableTypes::Null);
+        __rapidbson_runtime_exception("JsonGetValue", "Invalid argument!");
+        return new JsonVariable(VariableType::Null);
+    }
+    }
+}
+
+BLITZ3D(int) JsonHasMember(JsonVariable* object, BBStr name) {
+    switch (object->type) {
+    case VariableType::Document: {
+        return object->JsonDocument->HasMember(name);
+    }
+    case VariableType::Value: {
+        return object->JsonValue->HasMember(name);
+    }
+    default: {
+        __rapidbson_runtime_exception("JsonHasMember", "Invalid argument!");
+        return false;
     }
     }
 }
 
 BLITZ3D(int) JsonIsString(JsonVariable* object) {
-    if (object->type == VariableTypes::Value) {
-        return (*object->JsonValue).IsString();
+    if (object->type == VariableType::Value) {
+        return object->JsonValue->IsString();
     }
     else {
-        BlitzToolbox::runtime_exception("JsonIsString", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonIsString", "Invalid argument!");
         return false;
     }
 }
 
 BLITZ3D(int) JsonIsInt(JsonVariable* object) {
-    if (object->type == VariableTypes::Value) {
-        return (*object->JsonValue).IsInt();
+    if (object->type == VariableType::Value) {
+        return object->JsonValue->IsInt();
     }
     else {
-        BlitzToolbox::runtime_exception("JsonIsInt", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonIsInt", "Invalid argument!");
         return false;
     }
 }
 
 BLITZ3D(int) JsonIsFloat(JsonVariable* object) {
-    if (object->type == VariableTypes::Value) {
-        return (*object->JsonValue).IsFloat();
+    if (object->type == VariableType::Value) {
+        return object->JsonValue->IsFloat();
     }
     else {
-        BlitzToolbox::runtime_exception("JsonIsFloat", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonIsFloat", "Invalid argument!");
         return false;
     }
 }
 
 BLITZ3D(int) JsonIsBool(JsonVariable* object) {
-    if (object->type == VariableTypes::Value) {
-        return (*object->JsonValue).IsFloat();
+    if (object->type == VariableType::Value) {
+        return object->JsonValue->IsFloat();
     }
     else {
-        BlitzToolbox::runtime_exception("JsonIsBool", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonIsBool", "Invalid argument!");
         return false;
     }
 }
 
 BLITZ3D(int) JsonIsArray(JsonVariable* object) {
     switch (object->type) {
-    case VariableTypes::Document: {
-        return (*object->JsonDocument).IsArray();
+    case VariableType::Document: {
+        return object->JsonDocument->IsArray();
     }
-    case VariableTypes::Value: {
-        return (*object->JsonValue).IsArray();
+    case VariableType::Value: {
+        return object->JsonValue->IsArray();
     }
     default: {
-        BlitzToolbox::runtime_exception("JsonIsArray", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonIsArray", "Invalid argument!");
         return false;
     }
     }
@@ -156,14 +212,14 @@ BLITZ3D(int) JsonIsArray(JsonVariable* object) {
 
 BLITZ3D(int) JsonIsObject(JsonVariable* object) {
     switch (object->type) {
-    case VariableTypes::Document: {
-        return (*object->JsonDocument).IsObject();
+    case VariableType::Document: {
+        return object->JsonDocument->IsObject();
     }
-    case VariableTypes::Value: {
-        return (*object->JsonValue).IsObject();
+    case VariableType::Value: {
+        return object->JsonValue->IsObject();
     }
     default: {
-        BlitzToolbox::runtime_exception("JsonIsObject", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonIsObject", "Invalid argument!");
         return false;
     }
     }
@@ -171,112 +227,147 @@ BLITZ3D(int) JsonIsObject(JsonVariable* object) {
 
 BLITZ3D(int) JsonIsNull(JsonVariable* object) {
     switch (object->type) {
-    case VariableTypes::Document: {
-        return (*object->JsonDocument).IsNull();
+    case VariableType::Document: {
+        return object->JsonDocument->IsNull();
     }
-    case VariableTypes::Value: {
-        return (*object->JsonValue).IsNull();
+    case VariableType::Value: {
+        return object->JsonValue->IsNull();
+    }
+    case VariableType::Null: {
+        return true;
     }
     default: {
-        BlitzToolbox::runtime_exception("JsonIsNull", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonIsNull", "Invalid argument!");
         return true;
     }
     }
 }
 
 BLITZ3D(BBStr) JsonGetString(JsonVariable* object) {
-    if (object->type == VariableTypes::Value) {
-        return (*object->JsonValue).GetString();
+    if (object->type == VariableType::Value) {
+        if (!object->JsonValue->IsString()) {
+            __rapidbson_runtime_exception("JsonGetString", "Not a string value!");
+            return "";
+        }
+        else {
+            return object->JsonValue->GetString();
+        }
     }
     else {
-        BlitzToolbox::runtime_exception("JsonGetString", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonGetString", "Invalid argument!");
         return "";
     }
 }
 
 BLITZ3D(int) JsonGetInt(JsonVariable* object) {
-    if (object->type == VariableTypes::Value) {
-        return (*object->JsonValue).GetInt();
+    if (object->type == VariableType::Value) {
+        if (!object->JsonValue->IsInt()) {
+            __rapidbson_runtime_exception("JsonGetInt", "Not an integer value!");
+            return 0;
+        }
+        else {
+            return object->JsonValue->GetInt();
+        }
     }
     else {
-        BlitzToolbox::runtime_exception("JsonGetInt", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonGetInt", "Invalid argument!");
         return 0;
     }
 }
 
 BLITZ3D(float) JsonGetFloat(JsonVariable* object) {
-    if (object->type == VariableTypes::Value) {
-        return (*object->JsonValue).GetFloat();
+    if (object->type == VariableType::Value) {
+        if (!object->JsonValue->IsFloat()) {
+            __rapidbson_runtime_exception("JsonGetFloat", "Not a float value!");
+            return 0;
+        }
+        else {
+            return object->JsonValue->GetFloat();
+        }
     }
     else {
-        BlitzToolbox::runtime_exception("JsonGetFloat", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonGetFloat", "Invalid argument!");
         return 0;
     }
 }
 
 BLITZ3D(int) JsonGetBool(JsonVariable* object) {
-    if (object->type == VariableTypes::Value) {
-        return (*object->JsonValue).GetBool();
+    if (object->type == VariableType::Value) {
+        if (!object->JsonValue->IsBool()) {
+            __rapidbson_runtime_exception("JsonGetBool", "Not a boolean value!");
+            return 0;
+        }
+        else {
+            return object->JsonValue->GetBool();
+        }
     }
     else {
-        BlitzToolbox::runtime_exception("JsonGetBool", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonGetBool", "Invalid argument!");
         return 0;
     }
 }
 
 BLITZ3D(JsonVariable*) JsonGetArray(JsonVariable* object) {
     switch (object->type) {
-    case VariableTypes::Document: {
-        JsonVariable* array = new JsonVariable(VariableTypes::Array);
-        array->JsonArray = new Array((*object->JsonDocument).GetArray());
+    case VariableType::Document: {
+        if (!object->JsonDocument->IsArray()) {
+            __rapidbson_runtime_exception("JsonGetArray", "Not an array document!");
+            return new JsonVariable(VariableType::Null);
+        }
+        JsonVariable* array = new JsonVariable(VariableType::Array);
+        array->JsonArray = new Array(object->JsonDocument->GetArray());
         return array;
     }
-    case VariableTypes::Value: {
-        JsonVariable* array = new JsonVariable(VariableTypes::Array);
-        array->JsonArray = new Array((*object->JsonValue).GetArray());
+    case VariableType::Value: {
+        if (!object->JsonValue->IsArray()) {
+            __rapidbson_runtime_exception("JsonGetArray", "Not an array value!");
+            return new JsonVariable(VariableType::Null);
+        }
+        JsonVariable* array = new JsonVariable(VariableType::Array);
+        array->JsonArray = new Array(object->JsonValue->GetArray());
         return array;
     }
     default: {
-        BlitzToolbox::runtime_exception("JsonGetArray", "Invalid argument!");
-        return new JsonVariable(VariableTypes::Null);
+        __rapidbson_runtime_exception("JsonGetArray", "Invalid argument!");
+        return new JsonVariable(VariableType::Null);
     }
     }
 }
 
 BLITZ3D(int) JsonGetArraySize(JsonVariable* object) {
-    if (object->type == VariableTypes::Array) {
-        return (*object->JsonArray).Size();
+    if (object->type == VariableType::Array) {
+        return object->JsonArray->Size();
     }
     else {
-        BlitzToolbox::runtime_exception("JsonGetArraySize", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonGetArraySize", "Invalid argument!");
         return 0;
     }
 }
 
 BLITZ3D(JsonVariable*) JsonGetArrayValue(JsonVariable* object, int index) {
-    if (object->type == VariableTypes::Array) {
-        if ((*object->JsonArray).Size() <= index) {
-            BlitzToolbox::runtime_exception("JsonGetArrayValue", "Array index out of bounds!");
-            return new JsonVariable(VariableTypes::Null);
+    if (object->type == VariableType::Array) {
+        if (object->JsonArray->Size() <= index) {
+            __rapidbson_runtime_exception("JsonGetArrayValue", "Array index out of bounds!");
+            return new JsonVariable(VariableType::Null);
         }
         else {
-            JsonVariable* value = new JsonVariable(VariableTypes::Value);
+            JsonVariable* value = new JsonVariable(VariableType::Value);
             value->JsonValue = &(*object->JsonArray)[index];
             return value;
         }
     }
     else {
-        BlitzToolbox::runtime_exception("JsonGetArrayValue", "Invalid argument!");
-        return new JsonVariable(VariableTypes::Null);
+        __rapidbson_runtime_exception("JsonGetArrayValue", "Invalid argument!");
+        return new JsonVariable(VariableType::Null);
     }
 }
 
 BLITZ3D(int) JsonGetArrayCapacity(JsonVariable* object) {
-    if (object->type == VariableTypes::Array) {
-        return (*object->JsonArray).Capacity();
+    if (object->type == VariableType::Array) {
+        return object->JsonArray->Capacity();
     }
     else {
-        BlitzToolbox::runtime_exception("JsonGetArrayCapacity", "Invalid argument!");
+        __rapidbson_runtime_exception("JsonGetArrayCapacity", "Invalid argument!");
         return 0;
     }
 }

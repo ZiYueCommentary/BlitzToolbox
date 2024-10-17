@@ -102,6 +102,7 @@
     <PostBuildEvent>
       <Command>mkdir $(SolutionDir)Build\$(ProjectName)
 copy /y $(ProjectDir)$(ProjectName).decls $(SolutionDir)Build\$(ProjectName)\$(ProjectName).decls
+copy /y $(ProjectDir)$(ProjectName).bb $(SolutionDir)Build\$(ProjectName)\$(ProjectName).bb
 copy /y $(SolutionDir)$(IntDir)$(ProjectName).dll $(SolutionDir)Build\$(ProjectName)\$(ProjectName).dll
 copy /y $(SolutionDir)$(ProjectName)\Example.bb $(SolutionDir)Build\$(ProjectName)\Example.bb</Command>
     </PostBuildEvent>
@@ -183,6 +184,7 @@ copy /y $(SolutionDir)$(ProjectName)\Example.bb $(SolutionDir)Build\$(ProjectNam
   </ItemGroup>
   <ItemGroup>
     <None Include="Example.bb" />
+    <None Include="RapidBson.bb" />
     <None Include="RapidBson.decls" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

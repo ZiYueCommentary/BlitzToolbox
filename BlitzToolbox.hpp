@@ -85,30 +85,14 @@ namespace BlitzToolbox {
     }
 
 #ifdef BLITZ3DTSS
-    _NORETURN inline void runtime_error(const std::string& message) {
-        ULONG_PTR args[1]{};
-        args[0] = reinterpret_cast<ULONG_PTR>(BlitzToolbox::getCharPtr(message));
-        RaiseException(BLITZ3D_RUNTIME_ERROR, 0, 1, args);
-    }
-
     _NORETURN inline void runtime_error(BBStr message) {
         ULONG_PTR args[1]{};
         args[0] = reinterpret_cast<ULONG_PTR>(message);
         RaiseException(BLITZ3D_RUNTIME_ERROR, 0, 1, args);
     }
 
-    inline void runtime_exception(BBStr function, const std::string& message) {
-        ULONG_PTR args[2]{};
-        args[0] = reinterpret_cast<ULONG_PTR>(function);
-        args[1] = reinterpret_cast<ULONG_PTR>(BlitzToolbox::getCharPtr(message));
-        RaiseException(BLITZ3D_RUNTIME_EXCEPTION, 0, 2, args);
-    }
-
-    inline void runtime_exception(const std::string& function, const std::string& message) {
-        ULONG_PTR args[2]{};
-        args[0] = reinterpret_cast<ULONG_PTR>(BlitzToolbox::getCharPtr(function));
-        args[1] = reinterpret_cast<ULONG_PTR>(BlitzToolbox::getCharPtr(message));
-        RaiseException(BLITZ3D_RUNTIME_EXCEPTION, 0, 2, args);
+    _NORETURN inline void runtime_error(const std::string& message) {
+        runtime_error(getCharPtr(message));
     }
 
     inline void runtime_exception(BBStr function, BBStr message) {
@@ -116,6 +100,14 @@ namespace BlitzToolbox {
         args[0] = reinterpret_cast<ULONG_PTR>(function);
         args[1] = reinterpret_cast<ULONG_PTR>(message);
         RaiseException(BLITZ3D_RUNTIME_EXCEPTION, 0, 2, args);
+    }
+
+    inline void runtime_exception(BBStr function, const std::string& message) {
+        runtime_exception(function, getCharPtr(message));
+    }
+
+    inline void runtime_exception(const std::string& function, const std::string& message) {
+        runtime_exception(getCharPtr(function), getCharPtr(message));
     }
 #endif
 }
