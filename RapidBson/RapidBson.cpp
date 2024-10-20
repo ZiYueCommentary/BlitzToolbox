@@ -12,6 +12,7 @@
 #define BLITZ3DTSS
 
 #include "rapidjson/document.h"
+#include "rapidjson/prettywriter.h"
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -31,7 +32,22 @@ using Array = GenericValue<UTF8<>>::Array;
 
 enum class VariableType
 {
-    Document, Value, Array, Null
+    Document, Value, Array, Writer, Null
+};
+
+struct __Writer {
+    StringBuffer* buffer;
+    Writer<StringBuffer>* writer;
+
+    __Writer() {
+        this->buffer = new StringBuffer();
+        this->writer = new Writer(*buffer);
+    }
+
+    ~__Writer() {
+        delete buffer;
+        delete writer;
+    }
 };
 
 struct JsonVariable {
@@ -40,6 +56,7 @@ struct JsonVariable {
         Document* JsonDocument = nullptr;
         Value* JsonValue;
         Array* JsonArray;
+        __Writer* JsonWriter;
     };
 
     JsonVariable(VariableType type) {
@@ -369,5 +386,88 @@ BLITZ3D(int) JsonGetArrayCapacity(JsonVariable* object) {
     else {
         __rapidbson_runtime_exception("JsonGetArrayCapacity", "Invalid argument!");
         return 0;
+    }
+}
+
+BLITZ3D(JsonVariable*) JsonCreateWriter() {
+    JsonVariable* jsonVariable = new JsonVariable(VariableType::Writer);
+    jsonVariable->JsonWriter = new __Writer();
+    return jsonVariable;
+}
+
+BLITZ3D(JsonVariable*) JsonGetNewWriter(JsonVariable* object) {
+    switch (object->type) {
+    case VariableType::Document: {
+        __Writer* writer = new __Writer();
+        object->JsonDocument->Accept(*writer->writer);
+        JsonVariable* jsonVariable = new JsonVariable(VariableType::Writer);
+        jsonVariable->JsonWriter = writer;
+        return jsonVariable;
+    }
+    case VariableType::Value: {
+        __Writer* writer = new __Writer();
+        object->JsonValue->Accept(*writer->writer);
+        JsonVariable* jsonVariable = new JsonVariable(VariableType::Writer);
+        jsonVariable->JsonWriter = writer;
+        return jsonVariable;
+    }
+    default: {
+        __rapidbson_runtime_exception("JsonGetNewWriter", "Invalid argument!");
+        return new JsonVariable(VariableType::Null);
+    }
+    }
+}
+
+BLITZ3D(void) JsonDestroyWriter(JsonVariable* object) {
+    if (object->type == VariableType::Writer) {
+        delete object->JsonWriter;
+        object->JsonWriter = nullptr;
+    }
+    else {
+        __rapidbson_runtime_exception("JsonDestroyWriter", "Invalid argument!");
+    }
+}
+
+BLITZ3D(BBStr) JsonGetWriterString(JsonVariable* object) {
+    if (object->type == VariableType::Writer) {
+        if (object->JsonWriter == nullptr) {
+            __rapidbson_runtime_exception("JsonGetWriterString", "Writer is destroyed!");
+            return "";
+        }
+        return object->JsonWriter->buffer->GetString();
+    }
+    else {
+        __rapidbson_runtime_exception("JsonGetWriterString", "Invalid argument!");
+    }
+}
+
+BLITZ3D(int) JsonGetWriterStringLength(JsonVariable* object) {
+    if (object->type == VariableType::Writer) {
+        if (object->JsonWriter == nullptr) {
+            __rapidbson_runtime_exception("JsonGetWriterStringLength", "Writer is destroyed!");
+            return 0;
+        }
+        return object->JsonWriter->buffer->GetLength();
+    }
+    else {
+        __rapidbson_runtime_exception("JsonGetWriterStringLength", "Invalid argument!");
+    }
+}
+
+BLITZ3D(BBStr) JsonGetFormattedWriterString(JsonVariable* object) {
+    if (object->type == VariableType::Writer) {
+        if (object->JsonWriter == nullptr) {
+            __rapidbson_runtime_exception("JsonGetFormattedWriterString", "Writer is destroyed!");
+            return "";
+        }
+        Document document;
+        document.Parse(object->JsonWriter->buffer->GetString());
+        StringBuffer buffer;
+        PrettyWriter<StringBuffer> writer(buffer);
+        document.Accept(writer);
+        return BlitzToolbox::getCharPtr(buffer.GetString());
+    }
+    else {
+        __rapidbson_runtime_exception("JsonGetFormattedJsonFromWriter", "Invalid argument!");
     }
 }

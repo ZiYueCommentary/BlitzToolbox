@@ -3,7 +3,7 @@
 ; v1.0 2024.10.3
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
-Const JsonNoSuppresWarnings% = 0
+Const JsonNoSuppressedWarnings% = 0
 Const JsonNoRuntimeExceptions% = 1
 Const JsonNoExceptionLogs% = 2
 
