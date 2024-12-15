@@ -2,7 +2,7 @@
 * IniController - A part of BlitzToolbox
 * Reading & writing INI files.
 * 
-* v1.08 2024.9.16
+* v1.09 2024.12.15
 */
 
 #include "resource.h"
@@ -22,8 +22,9 @@ using IniMap = std::unordered_map<T, V>;
 
 static IniMap<std::string, IniMap<std::string, IniMap<std::string, std::string>>> IniBuffer;
 
-BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPrevious) {
-	if (clearPrevious) IniBuffer[NORMALIZE_PATH(path)].clear();
+BLITZ3D(void) IniWriteBuffer(BBStr path, BBStr bufferPath, bool clearPrevious) {
+	std::string newBufferPath = strcmp(bufferPath, "") ? NORMALIZE_PATH(path) : bufferPath;
+	if (clearPrevious) IniBuffer[newBufferPath].clear();
 	IniMap<std::string, IniMap<std::string, std::string>> buffer;
 	std::ifstream file(path);
 	if (!file.is_open()) return;
@@ -45,7 +46,7 @@ BLITZ3D(void) IniWriteBuffer(BBStr path, bool clearPrevious) {
 		}
 	}
 	file.close();
-	IniBuffer[NORMALIZE_PATH(path)] = buffer;
+	IniBuffer[newBufferPath] = buffer;
 }
 
 /* Read INI */

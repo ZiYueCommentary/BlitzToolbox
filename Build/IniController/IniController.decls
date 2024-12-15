@@ -1,4 +1,4 @@
-; IniController - A part of BlitzToolBox
+; IniController - A part of BlitzToolbox
 ; Reading & writing INI files.
 ; v1.08 2024.9.16
 ; https://github.com/ZiYueCommentary/BlitzToolbox
@@ -20,7 +20,7 @@ IniRemoveBufferSection(path$, section$):"_IniRemoveBufferSection@8"
 IniSetExportBufferValue(buffer%, section$, key$, value$):"_IniSetExportBufferValue@16"
 
 ; they have default parameters so you need include "IniController.bb"
-IniWriteBuffer_(path$, clearPrevious%):"_IniWriteBuffer@8"
+IniWriteBuffer_(path$, buffer$, clearPrevious%):"_IniWriteBuffer@8"
 IniGetString_$(path$, section$, key$, defaultValue$, allowBuffer%):"_IniGetString@20"
 IniGetInt_%(path$, section$, key$, defaultValue%, allowBuffer%):"_IniGetInt@20"
 IniGetFloat_#(path$, section$, key$, defaultValue#, allowBuffer%):"_IniGetFloat@20"

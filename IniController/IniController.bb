@@ -3,8 +3,8 @@
 ; v1.08 2024.9.16
 ; https://github.com/ZiYueCommentary/BlitzToolbox
 
-Function IniWriteBuffer(path$, clearPrevious% = 1)
-	IniWriteBuffer_(path$, clearPrevious%)
+Function IniWriteBuffer(path$, buffer$ = "", clearPrevious% = 1)
+	IniWriteBuffer_(path$, buffer$, clearPrevious%)
 End Function
 
 Function IniWriteString(path$, section$, key$, value$, updateBuffer% = 1)
