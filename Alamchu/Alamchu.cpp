@@ -42,6 +42,12 @@ BLITZ3D(gxPangoFont*) Pango_LoadFont(BBStr font_conf, int size) {
     return __new_pango_font(font_conf, size);
 }
 
+BLITZ3D(gxPangoFont*) Pango_LoadFontEx(BBStr font_desc) {
+	gxPangoFont* font = new gxPangoFont(font_desc);
+	pango_font_set.insert(font);
+	return font;
+}
+
 BLITZ3D(void) Pango_SetFont(gxPangoFont* font) {
 	if (!pango_font_set.contains(font)) {
 		BlitzToolbox::runtime_exception("Pango_SetFont", "Invalid Pango font instance!");

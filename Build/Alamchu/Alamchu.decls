@@ -7,6 +7,7 @@
 
 Pango_DefaultFont%():"_Pango_DefaultFont@0"
 Pango_LoadFont%(font_conf$, size%):"_Pango_LoadFont@8"
+Pango_LoadFontEx%(font_desc$):"_Pango_LoadFont@4"
 Pango_SetFont(font%):"_Pango_SetFont@4"
 Pango_StringWidth%(str$):"_Pango_StringWidth@4"
 Pango_StringHeight%(str$):"_Pango_StringHeight@4"
