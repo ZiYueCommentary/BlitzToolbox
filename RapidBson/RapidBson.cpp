@@ -393,6 +393,17 @@ BLITZ3D(int) JsonGetArrayCapacity(JsonVariable* object) {
     }
 }
 
+BLITZ3D(void) JsonFreeDocument(JsonVariable* object) {
+    if (object->type == VariableType::Document) {
+        delete object->JsonDocument;
+        object->JsonDocument = nullptr;
+        object->type = VariableType::Null;
+    }
+    else {
+        __rapidbson_runtime_exception("JsonFreeDocument", "Invalid argument!");
+    }
+}
+
 BLITZ3D(JsonVariable*) JsonCreateWriter() {
     JsonVariable* jsonVariable = new JsonVariable(VariableType::Writer);
     jsonVariable->JsonWriter = new __Writer();
