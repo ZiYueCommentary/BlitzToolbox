@@ -18,7 +18,7 @@ BLITZ3D(BBStr) ParseDomainTXT(BBStr txt, BBStr key) {
 	int n, a;
 	if ((n = s1.find(key)) != string::npos) result = s1.substr(n);
 	if ((a = result.find(';')) != string::npos) result = result.substr(s2.length() + 1, a - s2.length() - 1);
-	return BlitzToolbox::getCharPtr(result);
+	return BlitzToolbox::blitz3d_string(result);
 }
 
 BLITZ3D(BBStr) GetDomainTXT(BBStr domain) {
@@ -26,7 +26,7 @@ BLITZ3D(BBStr) GetDomainTXT(BBStr domain) {
 	DnsQuery_A(domain, DNS_TYPE_TEXT, DNS_QUERY_BYPASS_CACHE, NULL, &pResult, NULL);
 	std::string record = std::string(pResult->Data.TXT.pStringArray[0]);
 	DnsRecordListFree(pResult, DnsFreeRecordListDeep);
-	return BlitzToolbox::getCharPtr(record);
+	return BlitzToolbox::blitz3d_string(record);
 }
 
 BLITZ3D(bool) DownloadFile(BBStr url, BBStr file)
