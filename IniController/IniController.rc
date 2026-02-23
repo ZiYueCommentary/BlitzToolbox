@@ -13,7 +13,6 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 中文(简体，中国) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
@@ -51,7 +50,7 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,8,0
+ FILEVERSION 1,1,0,0
  PRODUCTVERSION 1,0,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
@@ -73,9 +72,9 @@ BEGIN
 #else
             VALUE "FileDescription", "Reading & writing INI files for Blitz3D. Strict file path edition."
 #endif
-            VALUE "FileVersion", "1.0.9.0"
+            VALUE "FileVersion", "1.1.0.0"
             VALUE "InternalName", "IniController.dll"
-            VALUE "LegalCopyright", "Copyright (C) 2024 ZiYueCommentary"
+            VALUE "LegalCopyright", "Copyright (C) 2026 ZiYueCommentary"
             VALUE "OriginalFilename", "IniControler.dll"
             VALUE "ProductName", "IniController"
             VALUE "ProductVersion", "1.0.1.0"
@@ -87,7 +86,7 @@ BEGIN
     END
 END
 
-#endif    // 中文(简体，中国) resources
+#endif
 /////////////////////////////////////////////////////////////////////////////
 
 

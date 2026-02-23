@@ -78,9 +78,9 @@ namespace BlitzToolbox {
         return result;
     }
 
-    _NODISCARD _CONSTEXPR20 std::string normalize_path(const std::filesystem::path& path) {
+    _NODISCARD  std::string normalize_path(const std::filesystem::path& path) {
         // Windows is not case sensitive
-        return to_lower_string(std::filesystem::absolute(path).lexically_normal().generic_string());
+        return std::filesystem::absolute(path).lexically_normal().generic_string();
     }
 
 #ifdef BLITZ3DTSS
